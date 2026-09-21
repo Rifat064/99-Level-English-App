@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation(project(":core:core-model"))
+    implementation(project(":core:core-database"))
 
     // Supabase
     api(platform(libs.supabase.bom))

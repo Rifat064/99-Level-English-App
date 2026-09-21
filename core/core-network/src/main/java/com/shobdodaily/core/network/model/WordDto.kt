@@ -28,3 +28,16 @@ fun WordDto.toDomain() = Word(
     difficulty = difficulty,
     frequencyRank = frequencyRank
 )
+
+fun WordDto.toEntity() = com.shobdodaily.core.database.model.WordEntity(
+    id = id,
+    word = word,
+    pos = pos,
+    bangla = bangla,
+    englishGloss = englishGloss,
+    examTag = examTag,
+    examCategory = examCategory,
+    difficulty = difficulty,
+    frequencyRank = frequencyRank,
+    createdAt = null
+)

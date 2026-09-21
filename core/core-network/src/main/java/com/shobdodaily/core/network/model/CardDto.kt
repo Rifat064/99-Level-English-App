@@ -32,3 +32,18 @@ fun CardDto.toDomain() = Card(
     imageBlurhash = imageBlurhash,
     status = status
 )
+
+fun CardDto.toEntity() = com.shobdodaily.core.database.model.CardEntity(
+    id = id,
+    dayIndex = dayIndex,
+    season = season,
+    wordAId = wordAId,
+    wordBId = wordBId,
+    sentenceEn = sentenceEn,
+    sentenceBn = sentenceBn,
+    bubbleText = bubbleText,
+    imagePath = imagePath,
+    imageBlurhash = imageBlurhash,
+    status = status,
+    publishedAt = null
+)

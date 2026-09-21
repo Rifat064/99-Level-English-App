@@ -15,4 +15,9 @@ abstract class RepositoryModule {
     abstract fun bindProfileRepository(
         supabaseProfileRepository: SupabaseProfileRepository
     ): ProfileRepository
+
+    @Binds
+    abstract fun bindCardRepository(
+        offlineFirstCardRepository: com.shobdodaily.core.network.repository.OfflineFirstCardRepository
+    ): com.shobdodaily.core.model.repository.CardRepository
 }
