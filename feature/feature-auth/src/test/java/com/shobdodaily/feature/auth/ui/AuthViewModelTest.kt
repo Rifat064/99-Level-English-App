@@ -5,6 +5,10 @@ import com.shobdodaily.feature.auth.domain.AuthRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -26,6 +30,7 @@ class AuthViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        every { authRepository.sessionStatus } returns MutableStateFlow<SessionStatus>(mockk<SessionStatus.NotAuthenticated>())
         every { authRepository.isUserSignedIn() } returns false
         viewModel = AuthViewModel(authRepository)
     }
@@ -37,12 +42,16 @@ class AuthViewModelTest {
 
     @Test
     fun `checkAuthStatus sets Success if user is signed in`() = runTest {
-        every { authRepository.isUserSignedIn() } returns true
+        val sessionStatusFlow = MutableStateFlow<SessionStatus>(mockk<SessionStatus.NotAuthenticated>())
+        every { authRepository.sessionStatus } returns sessionStatusFlow
+        
         val vm = AuthViewModel(authRepository)
         
         vm.uiState.test {
             assertEquals(AuthUiState.Idle, awaitItem())
             vm.checkAuthStatus()
+            
+            sessionStatusFlow.value = mockk<SessionStatus.Authenticated>()
             assertEquals(AuthUiState.Success, awaitItem())
         }
     }

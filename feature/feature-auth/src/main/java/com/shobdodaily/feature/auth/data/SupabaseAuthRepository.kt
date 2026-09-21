@@ -5,7 +5,9 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.IDToken
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,6 +16,8 @@ import javax.inject.Singleton
 class SupabaseAuthRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) : AuthRepository {
+
+    override val sessionStatus: StateFlow<SessionStatus> = supabaseClient.auth.sessionStatus
 
     override suspend fun signInWithGoogle(idToken: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {

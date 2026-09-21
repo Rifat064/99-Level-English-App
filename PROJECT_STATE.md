@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 2 — Auth and shell |
-| Current step | 2.3 (next: Session persistence) |
+| Current step | 2.4 (next: Navigation graph + deep link) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -53,7 +53,7 @@ Never delete history from the session log or decision log. Append only.
 ### Phase 2 — Auth and shell
 - [x] 2.1 Supabase client + DTOs
 - [x] 2.2 Google sign-in (Credential Manager)
-- [ ] 2.3 Session persistence
+- [x] 2.3 Session persistence
 - [ ] 2.4 Profile creation on first login
 - [ ] 2.5 Navigation graph + deep link
 - [ ] 2.6 Sign out + delete account
@@ -171,3 +171,4 @@ Append one row per completed step.
 | 2026-09-21 | 1.7 | Wrote supabase/functions/get-daily-card/index.ts to compute day_index and return today's card payload alongside its two words. | Deferred local curl verification as Supabase is not running. |
 | 2026-09-21 | 2.1 | Created domain models in core-model, configured core-network with Supabase v3 SDK and kotlinx.serialization, added DTOs, mappers, and DI module. Wrote unit tests. | assembleDebug and testDebugUnitTest passed. |
 | 2026-09-21 | 2.2 | Added Credential Manager to feature-auth, built SupabaseAuthRepository, AuthViewModel, and LoginScreen UI with "Continue as Guest" fallback. Fixed KSP issue by exposing Supabase client as `api` in core-network. | AuthViewModelTest, assembleDebug, and testDebugUnitTest passed. |
+| 2026-09-21 | 2.3 | Exposed `sessionStatus` from AuthRepository and updated AuthViewModel to observe it reactively. Confirmed Supabase Kotlin v3 natively supports Android DataStore auto-restoration via `multiplatform-settings-android`. | Tests passed. |

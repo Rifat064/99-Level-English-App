@@ -12,9 +12,11 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.shobdodaily.feature.auth.BuildConfig
 import com.shobdodaily.feature.auth.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,8 +36,18 @@ class AuthViewModel @Inject constructor(
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     fun checkAuthStatus() {
-        if (authRepository.isUserSignedIn()) {
-            _uiState.value = AuthUiState.Success
+        viewModelScope.launch {
+            authRepository.sessionStatus.collectLatest { status ->
+                when (status) {
+                    is SessionStatus.Authenticated -> _uiState.value = AuthUiState.Success
+                    is SessionStatus.NotAuthenticated -> {
+                        if (_uiState.value !is AuthUiState.Error) {
+                            _uiState.value = AuthUiState.Idle
+                        }
+                    }
+                    else -> {} // Ignore Initializing or RefreshFailure here, let splash screen handle it if needed
+                }
+            }
         }
     }
 
