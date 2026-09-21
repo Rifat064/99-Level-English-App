@@ -11,11 +11,11 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 1 — Backend and content |
-| Current step | 1.3 (next: Pipeline 01–04, 07) |
+| Current step | 1.4 (next: Image generation + upload) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
-| Blocked on | nothing |
-| Next owner action required | none for Phase 0 (supply words_master.csv before 1.3) |
+| Blocked on | owner review of `05_review.csv` |
+| Next owner action required | **GATE 1.4**: Review `pipeline/05_review.csv` Bangla and mark step 1.4 complete here. |
 
 ---
 
@@ -44,7 +44,7 @@ Never delete history from the session log or decision log. Append only.
 ### Phase 1 — Backend and content
 - [x] 1.1 Schema migration
 - [x] 1.2 RLS policies + policy tests
-- [ ] 1.3 Pipeline 01–04, 07
+- [x] 1.3 Pipeline 01–04, 07
 - [ ] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
 - [ ] 1.5 Image generation + upload
 - [ ] 1.6 `get-signed-image` edge function
@@ -108,7 +108,7 @@ Never delete history from the session log or decision log. Append only.
 | Google Cloud OAuth client | not created | needed for Credential Manager; requires SHA-1 of debug keystore |
 | Play Console account | not created | $25, needed before Phase 4 |
 | Image generation access | undecided | API key, or local Flux.1-schnell |
-| `words_master.csv` | not supplied | 10,000 rows |
+| `words_master.csv` | supplied | Top 1000 Verbs |
 
 ### Required `local.properties` keys
 ```
@@ -137,7 +137,7 @@ Append a row whenever something is decided. D1–D10 are locked in
 | Q1 | Final app name and package id? | 0.1 | resolved: ShobdoDaily (`com.shobdodaily.app`) |
 | Q2 | Subscription prices in BDT for monthly / 6-month / lifetime? | 4.3 | open |
 | Q3 | Will the app also ship as a direct APK outside Play? If yes, an SSLCommerz provider is needed. | 4.2 | open |
-| Q4 | Does `words_master.csv` already contain Bangla meanings and exam tags, or must the pipeline generate them? | 1.3 | open |
+| Q4 | Does `words_master.csv` already contain Bangla meanings and exam tags, or must the pipeline generate them? | 1.3 | resolved: Pipeline generates them. |
 | Q5 | Image generation route: paid API or local model? | 1.5 | open |
 
 ---
@@ -164,3 +164,4 @@ Append one row per completed step.
 | 2026-09-21 | 0.5 | Set up CI workflow for ktlint and detekt, created .editorconfig to fix Compose naming, cleaned up empty package placeholders. | CI passes with linting, ktlintCheck, detekt, and testDebugUnitTest. |
 | 2026-09-21 | 1.1 | Created supabase/migrations/0001_init.sql implementing all tables from design doc (words, cards, profiles, user_progress, quiz_attempts, subscriptions). | Verification deferred to owner as supabase CLI/local Postgres is not available in environment. |
 | 2026-09-21 | 1.2 | Created supabase/migrations/0002_rls.sql and supabase/tests/rls_test.sql with pgTAP script. | Test script is complete but deferred verification to owner. |
+| 2026-09-21 | 1.3 | Built and ran python pipeline scripts 01–04 and 07. Generated mock text content. | Emitted 90 rows to 05_review.csv successfully. |
