@@ -11,6 +11,9 @@ object Splash : Destination
 object Login : Destination
 
 @Serializable
+object Onboarding : Destination
+
+@Serializable
 object Home : Destination
 
 @Serializable

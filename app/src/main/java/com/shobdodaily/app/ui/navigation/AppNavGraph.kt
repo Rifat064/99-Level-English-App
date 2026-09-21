@@ -21,6 +21,11 @@ import com.shobdodaily.core.ui.navigation.Quiz
 import com.shobdodaily.core.ui.navigation.Settings
 import com.shobdodaily.core.ui.navigation.Splash
 import com.shobdodaily.feature.auth.ui.LoginScreen
+import com.shobdodaily.feature.home.ui.onboarding.OnboardingScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 
 @Composable
 fun AppNavGraph(
@@ -29,19 +34,52 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Login,
+        startDestination = Splash,
         modifier = modifier
     ) {
-        // We start at Login for now. In reality, Splash should decide between Home/Login
         composable<Splash> {
+            val splashViewModel = hiltViewModel<SplashViewModel>()
+            val uiState by splashViewModel.uiState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(uiState) {
+                when (uiState) {
+                    is SplashUiState.GoToLogin -> {
+                        navController.navigate(Login) {
+                            popUpTo(Splash) { inclusive = true }
+                        }
+                    }
+                    is SplashUiState.GoToOnboarding -> {
+                        navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                            popUpTo(Splash) { inclusive = true }
+                        }
+                    }
+                    is SplashUiState.GoToHome -> {
+                        navController.navigate(Home) {
+                            popUpTo(Splash) { inclusive = true }
+                        }
+                    }
+                    else -> {}
+                }
+            }
+
             PlaceholderScreen("Splash")
         }
 
         composable<Login> {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Home) {
+                    navController.navigate(Splash) {
                         popUpTo(Login) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<com.shobdodaily.core.ui.navigation.Onboarding> {
+            OnboardingScreen(
+                onOnboardingCompleted = {
+                    navController.navigate(Home) {
+                        popUpTo(com.shobdodaily.core.ui.navigation.Onboarding) { inclusive = true }
                     }
                 }
             )
