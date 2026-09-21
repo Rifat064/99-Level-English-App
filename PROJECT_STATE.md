@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 1 — Backend and content |
-| Current step | 1.2 (next: Pipeline 01–04, 07) |
+| Current step | 1.3 (next: Pipeline 01–04, 07) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -43,7 +43,7 @@ Never delete history from the session log or decision log. Append only.
 
 ### Phase 1 — Backend and content
 - [x] 1.1 Schema migration
-- [ ] 1.2 RLS policies + policy tests
+- [x] 1.2 RLS policies + policy tests
 - [ ] 1.3 Pipeline 01–04, 07
 - [ ] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
 - [ ] 1.5 Image generation + upload
@@ -163,3 +163,4 @@ Append one row per completed step.
 | 2026-09-21 | 0.4 | Implemented design tokens in core-ui (Color, Type, Spacing, Shape, Theme), bundled Noto Sans Bengali fonts, created BanglaFontPreview for conjuncts (ক্ষ ত্র জ্ঞ ঙ্গ), wired into MainActivity | :core:core-ui:testDebugUnitTest & assembleDebug succeeded |
 | 2026-09-21 | 0.5 | Set up CI workflow for ktlint and detekt, created .editorconfig to fix Compose naming, cleaned up empty package placeholders. | CI passes with linting, ktlintCheck, detekt, and testDebugUnitTest. |
 | 2026-09-21 | 1.1 | Created supabase/migrations/0001_init.sql implementing all tables from design doc (words, cards, profiles, user_progress, quiz_attempts, subscriptions). | Verification deferred to owner as supabase CLI/local Postgres is not available in environment. |
+| 2026-09-21 | 1.2 | Created supabase/migrations/0002_rls.sql and supabase/tests/rls_test.sql with pgTAP script. | Test script is complete but deferred verification to owner. |
