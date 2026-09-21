@@ -24,4 +24,6 @@ android {
 
 dependencies {
     implementation(project(":core:core-model"))
+
+    implementation(libs.androidx.datastore.preferences)
 }
