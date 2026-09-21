@@ -10,8 +10,8 @@ session starts with stale information here, the agent will repeat or skip work.
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 1 — Backend and content |
-| Current step | 1.7 (next: Phase 2.1) |
+| Current phase | Phase 2 — Auth and shell |
+| Current step | 2.1 (next: Google sign-in) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -48,7 +48,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
 - [x] 1.5 Image generation + upload
 - [x] 1.6 `get-signed-image` edge function
-- [ ] 1.7 `get-daily-card` edge function
+- [x] 1.7 `get-daily-card` edge function
 
 ### Phase 2 — Auth and shell
 - [ ] 2.1 Supabase client + DTOs
@@ -168,3 +168,4 @@ Append one row per completed step.
 | 2026-09-21 | 1.4 | Owner completed human review of 05_review.csv Bangla text. | Owner verified and authorized proceed. |
 | 2026-09-21 | 1.5 | Created pipeline/06_image.py and pipeline/08_upload.py, and added python-supabase to requirements.txt. Ran scripts with --mock to generate and optimize 90 dummy WebP images and simulate DB upload. | Simulated generation and upload successfully completed. |
 | 2026-09-21 | 1.6 | Wrote supabase/functions/get-signed-image/index.ts to compute user's day_index from enrolled_at, check free-window or active subscription, and return a signed URL. | Deferred local curl verification as Supabase is not running. |
+| 2026-09-21 | 1.7 | Wrote supabase/functions/get-daily-card/index.ts to compute day_index and return today's card payload alongside its two words. | Deferred local curl verification as Supabase is not running. |
