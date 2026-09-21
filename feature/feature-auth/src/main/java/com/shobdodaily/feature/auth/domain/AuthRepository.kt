@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AuthRepository {
     val sessionStatus: StateFlow<SessionStatus>
+    val currentUserId: String?
     
     suspend fun signInWithGoogle(idToken: String): Result<Unit>
     suspend fun signInAnonymously(): Result<Unit>

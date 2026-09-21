@@ -2,6 +2,7 @@ package com.shobdodaily.feature.auth.ui
 
 import app.cash.turbine.test
 import com.shobdodaily.feature.auth.domain.AuthRepository
+import com.shobdodaily.core.model.repository.ProfileRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -24,6 +25,7 @@ import org.junit.Test
 class AuthViewModelTest {
 
     private val authRepository = mockk<AuthRepository>()
+    private val profileRepository = mockk<ProfileRepository>()
     private lateinit var viewModel: AuthViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -32,7 +34,9 @@ class AuthViewModelTest {
         Dispatchers.setMain(testDispatcher)
         every { authRepository.sessionStatus } returns MutableStateFlow<SessionStatus>(mockk<SessionStatus.NotAuthenticated>())
         every { authRepository.isUserSignedIn() } returns false
-        viewModel = AuthViewModel(authRepository)
+        every { authRepository.currentUserId } returns "test-user-id"
+        coEvery { profileRepository.createProfileIfNotExist(any(), any()) } returns Result.success(Unit)
+        viewModel = AuthViewModel(authRepository, profileRepository)
     }
 
     @After
@@ -45,7 +49,7 @@ class AuthViewModelTest {
         val sessionStatusFlow = MutableStateFlow<SessionStatus>(mockk<SessionStatus.NotAuthenticated>())
         every { authRepository.sessionStatus } returns sessionStatusFlow
         
-        val vm = AuthViewModel(authRepository)
+        val vm = AuthViewModel(authRepository, profileRepository)
         
         vm.uiState.test {
             assertEquals(AuthUiState.Idle, awaitItem())

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.shobdodaily.core.model.repository.ProfileRepository
 import com.shobdodaily.feature.auth.BuildConfig
 import com.shobdodaily.feature.auth.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +30,8 @@ sealed interface AuthUiState {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
@@ -75,6 +77,10 @@ class AuthViewModel @Inject constructor(
                     
                     val supabaseResult = authRepository.signInWithGoogle(idToken)
                     if (supabaseResult.isSuccess) {
+                        val userId = authRepository.currentUserId
+                        if (userId != null) {
+                            profileRepository.createProfileIfNotExist(userId, googleIdTokenCredential.displayName)
+                        }
                         _uiState.value = AuthUiState.Success
                     } else {
                         _uiState.value = AuthUiState.Error(
@@ -97,6 +103,10 @@ class AuthViewModel @Inject constructor(
             _uiState.value = AuthUiState.Loading
             val result = authRepository.signInAnonymously()
             if (result.isSuccess) {
+                val userId = authRepository.currentUserId
+                if (userId != null) {
+                    profileRepository.createProfileIfNotExist(userId, null)
+                }
                 _uiState.value = AuthUiState.Success
             } else {
                 _uiState.value = AuthUiState.Error(

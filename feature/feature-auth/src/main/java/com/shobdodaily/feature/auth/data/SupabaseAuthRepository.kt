@@ -19,6 +19,9 @@ class SupabaseAuthRepository @Inject constructor(
 
     override val sessionStatus: StateFlow<SessionStatus> = supabaseClient.auth.sessionStatus
 
+    override val currentUserId: String?
+        get() = supabaseClient.auth.currentUserOrNull()?.id
+
     override suspend fun signInWithGoogle(idToken: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             supabaseClient.auth.signInWith(IDToken) {
