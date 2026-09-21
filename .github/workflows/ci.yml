@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, phase0 ]
+  pull_request:
+    branches: [ main, phase0 ]
+
+jobs:
+  build-and-test:
+    name: Build, Lint, Detekt & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck --continue
+
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      - name: Run Android Lint
+        run: ./gradlew lintDebug
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Assemble Debug APK
+        run: ./gradlew assembleDebug

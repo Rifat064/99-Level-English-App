@@ -1,0 +1,43 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+complexity:
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 20
+    thresholdInClasses: 20
+    thresholdInInterfaces: 20
+  LongMethod:
+    active: true
+    threshold: 80
+    ignoreAnnotated: ['Composable']
+  LargeClass:
+    active: true
+    threshold: 300
+
+naming:
+  FunctionNaming:
+    active: true
+    functionPattern: '^[a-zA-Z][a-zA-Z0-9]*$'
+    excludeClassPattern: '$^'
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: true
+    excludeImportStatements: true
+    excludeCommentStatements: true
+  MagicNumber:
+    active: false
+  WildcardImport:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ['Preview']

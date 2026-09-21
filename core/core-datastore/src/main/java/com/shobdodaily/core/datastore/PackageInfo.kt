@@ -1,3 +1,1 @@
-package com.shobdodaily.core.datastore
-
-// Placeholder for Preferences DataStore
+﻿package com.shobdodaily.core.datastore

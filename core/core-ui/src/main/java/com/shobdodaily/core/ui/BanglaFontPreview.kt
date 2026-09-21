@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shobdodaily.core.ui.theme.LocalSpacing
 import com.shobdodaily.core.ui.theme.ShobdoDailyTheme
@@ -44,98 +43,99 @@ fun BanglaFontPreviewContent(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.primary,
         )
 
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Column(modifier = Modifier.padding(spacing.md)) {
-                Text(
-                    text = "Required Conjuncts (যুক্তবর্ণ):",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(modifier = Modifier.height(spacing.xs))
-                // Testing the target conjuncts: ক্ষ ত্র জ্ঞ ঙ্গ
-                Text(
-                    text = "ক্ষ  ত্র  জ্ঞ  ঙ্গ",
-                    style = MaterialTheme.typography.displayMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+        ConjunctVerificationCard()
+        SampleCardAnatomy()
+    }
+}
+
+@Composable
+private fun ConjunctVerificationCard() {
+    val spacing = LocalSpacing.current
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(modifier = Modifier.padding(spacing.md)) {
+            Text(
+                text = "Required Conjuncts (যুক্তবর্ণ):",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(spacing.xs))
+            // Testing the target conjuncts: ক্ষ ত্র জ্ঞ ঙ্গ
+            Text(
+                text = "ক্ষ  ত্র  জ্ঞ  ঙ্গ",
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
         }
+    }
+}
 
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
-            modifier = Modifier.fillMaxWidth(),
+@Composable
+private fun SampleCardAnatomy() {
+    val spacing = LocalSpacing.current
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier.padding(spacing.md),
+            verticalArrangement = Arrangement.spacedBy(spacing.sm),
         ) {
-            Column(
-                modifier = Modifier.padding(spacing.md),
-                verticalArrangement = Arrangement.spacedBy(spacing.sm),
-            ) {
-                Text(
-                    text = "Sample Card Anatomical Preview",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
+            Text(
+                text = "Sample Card Anatomical Preview",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.secondary,
+            )
 
-                Text(
-                    text = "➡️ The meticulous scholar delivered an articulate speech.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
+            Text(
+                text = "➡️ The meticulous scholar delivered an articulate speech.",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "🏖️ meticulous = খুঁতখুঁতে, সূক্ষ্ম",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = "[BCS 35]",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
+            WordTranslationRow("🏖️ meticulous = খুঁতখুঁতে, সূক্ষ্ম", "[BCS 35]")
+            WordTranslationRow("💔 articulate = স্পষ্টভাষী, প্রাঞ্জল", "[Janata Bank 2019]")
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "💔 articulate = স্পষ্টভাষী, প্রাঞ্জল",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = "[Janata Bank 2019]",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
+            Spacer(modifier = Modifier.height(spacing.xs))
 
-                Spacer(modifier = Modifier.height(spacing.xs))
-
-                Text(
-                    text = "🪄 কী ঘটছে:",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-                Text(
-                    text = "সূক্ষ্ম ও যত্নশীল পণ্ডিতটি একটি স্পষ্ট ও প্রাঞ্জল বক্তব্য প্রদান করলেন।",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    lineHeight = 26.sp,
-                )
-            }
+            Text(
+                text = "🪄 কী ঘটছে:",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+            Text(
+                text = "সূক্ষ্ম ও যত্নশীল পণ্ডিতটি একটি স্পষ্ট ও প্রাঞ্জল বক্তব্য প্রদান করলেন।",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                lineHeight = 26.sp,
+            )
         }
+    }
+}
+
+@Composable
+private fun WordTranslationRow(meaning: String, examTag: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = meaning,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Text(
+            text = examTag,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
     }
 }
 
