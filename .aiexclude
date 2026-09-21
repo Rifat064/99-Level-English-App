@@ -1,0 +1,28 @@
+# Files Gemini in Android Studio must never read or send.
+# Same syntax as .gitignore. Applies to this directory and below.
+
+# Secrets and credentials
+local.properties
+*.jks
+*.keystore
+**/google-services.json
+**/service-account*.json
+**/play-service-account*.json
+.env
+.env.*
+
+# Pipeline caches and raw content (large, and full of API responses)
+pipeline/.cache/
+pipeline/out/
+pipeline/**/*.csv
+pipeline/**/*.png
+pipeline/**/*.webp
+
+# Supabase local state
+supabase/.temp/
+supabase/.branches/
+
+# Build output
+build/
+**/build/
+.gradle/

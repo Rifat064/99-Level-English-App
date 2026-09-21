@@ -1,0 +1,160 @@
+# PROJECT_STATE.md
+
+Living state of the project. **The agent updates this file in the same commit as
+every step it completes.** It is the handover document between sessions — if a
+session starts with stale information here, the agent will repeat or skip work.
+
+---
+
+## Snapshot
+
+| Field | Value |
+|---|---|
+| Current phase | Phase 0 — Foundations |
+| Current step | 0.2 (next: Module skeleton) |
+| Last updated | 2026-09-21 |
+| Build status | passes assembleDebug |
+| Blocked on | nothing |
+| Next owner action required | none for Phase 0 (supply words_master.csv before 1.3) |
+
+---
+
+## How to update this file
+
+At the end of every step, the agent rewrites:
+
+1. the **Snapshot** table,
+2. the checkbox for that step in **Progress**,
+3. a new row in **Session log**,
+4. any new entry in **Open questions**, **Decision log**, or **Known issues**.
+
+Never delete history from the session log or decision log. Append only.
+
+---
+
+## Progress
+
+### Phase 0 — Foundations
+- [x] 0.1 Gradle project + version catalog
+- [ ] 0.2 Module skeleton
+- [ ] 0.3 Core dependencies + Hilt
+- [ ] 0.4 Design tokens + Bangla font verification
+- [ ] 0.5 Lint, detekt, CI
+
+### Phase 1 — Backend and content
+- [ ] 1.1 Schema migration
+- [ ] 1.2 RLS policies + policy tests
+- [ ] 1.3 Pipeline 01–04, 07
+- [ ] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
+- [ ] 1.5 Image generation + upload
+- [ ] 1.6 `get-signed-image` edge function
+- [ ] 1.7 `get-daily-card` edge function
+
+### Phase 2 — Auth and shell
+- [ ] 2.1 Supabase client + DTOs
+- [ ] 2.2 Google sign-in (Credential Manager)
+- [ ] 2.3 Session persistence
+- [ ] 2.4 Profile creation on first login
+- [ ] 2.5 Navigation graph + deep link
+- [ ] 2.6 Sign out + delete account
+
+### Phase 3 — Home and daily card
+- [ ] 3.1 Onboarding
+- [ ] 3.2 Home + "Start your journey"
+- [ ] 3.3 Room schema
+- [ ] 3.4 Offline-first CardRepository
+- [ ] 3.5 Daily card UI
+- [ ] 3.6 Learned / bookmark / TTS
+- [ ] 3.7 Streak logic
+- [ ] 3.8 Daily notification
+
+### Phase 4 — History, paywall, payment
+- [ ] 4.1 History screen + locking
+- [ ] 4.2 `BillingProvider` + fake
+- [ ] 4.3 Play Billing implementation
+- [ ] 4.4 `verify-purchase` edge function
+- [ ] 4.5 Entitlement gating
+- [ ] 4.6 RTDN webhook
+- [ ] 4.7 Paywall + restore
+
+### Phase 5 — Weekly quiz
+- [ ] 5.1 QuizGenerator
+- [ ] 5.2 Availability rules
+- [ ] 5.3 Quiz UI
+- [ ] 5.4 Results + persistence
+
+### Phase 6 — Retention
+- [ ] 6.1 Spaced repetition
+- [ ] 6.2 Share as image
+- [ ] 6.3 Exam-tag filter + search
+- [ ] 6.4 Settings
+- [ ] 6.5 Catch-up flow
+
+### Phase 7 — Release
+- [ ] 7.1 Crash reporting + analytics
+- [ ] 7.2 R8 rules
+- [ ] 7.3 Play compliance
+- [ ] 7.4 Accessibility
+- [ ] 7.5 Localization
+- [ ] 7.6 Season 2 content
+
+---
+
+## Environment
+
+| Item | Status | Notes |
+|---|---|---|
+| Supabase project | not created | owner creates, pastes URL + anon key into `local.properties` |
+| Google Cloud OAuth client | not created | needed for Credential Manager; requires SHA-1 of debug keystore |
+| Play Console account | not created | $25, needed before Phase 4 |
+| Image generation access | undecided | API key, or local Flux.1-schnell |
+| `words_master.csv` | not supplied | 10,000 rows |
+
+### Required `local.properties` keys
+```
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+GOOGLE_WEB_CLIENT_ID=
+```
+
+---
+
+## Decision log
+
+Append a row whenever something is decided. D1–D10 are locked in
+`DESIGN_AND_SCOPE.md` §2 and may only be changed by the owner.
+
+| Date | Decision | Made by | Reason |
+|---|---|---|---|
+| — | D1–D10 locked | owner | see design doc §2 |
+
+---
+
+## Open questions
+
+| # | Question | Blocks | Status |
+|---|---|---|---|
+| Q1 | Final app name and package id? | 0.1 | resolved: ShobdoDaily (`com.shobdodaily.app`) |
+| Q2 | Subscription prices in BDT for monthly / 6-month / lifetime? | 4.3 | open |
+| Q3 | Will the app also ship as a direct APK outside Play? If yes, an SSLCommerz provider is needed. | 4.2 | open |
+| Q4 | Does `words_master.csv` already contain Bangla meanings and exam tags, or must the pipeline generate them? | 1.3 | open |
+| Q5 | Image generation route: paid API or local model? | 1.5 | open |
+
+---
+
+## Known issues
+
+| # | Issue | Severity | Status |
+|---|---|---|---|
+| — | none yet | — | — |
+
+---
+
+## Session log
+
+Append one row per completed step.
+
+| Date | Step | What changed | Verification result |
+|---|---|---|---|
+| — | — | project initialised with design docs | n/a |
+| 2026-09-21 | 0.1 | Configured Gradle 8.10.2, AGP 8.7.3, Kotlin 2.0.21, Compose, libs.versions.toml, app module with package com.shobdodaily.app, MainActivity | assembleDebug succeeded (BUILD SUCCESSFUL) |
