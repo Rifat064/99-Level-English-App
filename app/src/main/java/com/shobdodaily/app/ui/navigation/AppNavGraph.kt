@@ -21,6 +21,7 @@ import com.shobdodaily.core.ui.navigation.Quiz
 import com.shobdodaily.core.ui.navigation.Settings
 import com.shobdodaily.core.ui.navigation.Splash
 import com.shobdodaily.feature.auth.ui.LoginScreen
+import com.shobdodaily.feature.home.ui.home.HomeScreen
 import com.shobdodaily.feature.home.ui.onboarding.OnboardingScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -86,10 +87,11 @@ fun AppNavGraph(
         }
 
         composable<Home> {
-            PlaceholderScreen("Home") {
-                // Navigate to DailyCard for dayIndex = 1 as a placeholder action
-                navController.navigate(DailyCard(1))
-            }
+            HomeScreen(
+                onNavigateToCard = { dayIndex ->
+                    navController.navigate(DailyCard(dayIndex))
+                }
+            )
         }
 
         composable<DailyCard>(
