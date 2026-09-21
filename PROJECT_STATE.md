@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 3 — Home and daily card |
-| Current step | 3.3 (next: Room schema) |
+| Current step | 3.4 (next: Offline-first CardRepository) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -61,7 +61,7 @@ Never delete history from the session log or decision log. Append only.
 ### Phase 3 — Home and daily card
 - [x] 3.1 Onboarding
 - [x] 3.2 Home + "Start your journey"
-- [ ] 3.3 Room schema
+- [x] 3.3 Room schema
 - [ ] 3.4 Offline-first CardRepository
 - [ ] 3.5 Daily card UI
 - [ ] 3.6 Learned / bookmark / TTS
@@ -177,3 +177,4 @@ Append one row per completed step.
 | 2026-09-21 | 2.6 | Created `delete-account` Edge Function to securely call `admin.deleteUser()`. Updated `AuthRepository` and `AuthViewModel` with `signOut` and `deleteAccount` methods which clear the `CredentialManager` state. | Compilation and unit tests passed. |
 | 2026-09-21 | 3.1 | Created `core-datastore` with `SettingsRepository` for local prefs. Added `SplashViewModel` and `OnboardingScreen` (3-pane pager) with routing logic based on session state and onboarding completion. | Unit tests passed, routing tested. |
 | 2026-09-21 | 3.2 | Built `HomeScreen` with streak widget, status chip, and 'Start your journey' button. Added `getProfile()` to `ProfileRepository` without `userId` param, enforcing strict module decoupling. Implemented `HomeViewModel` to fetch profile. | Compilation and unit tests passed. |
+| 2026-09-21 | 3.3 | Built `WordEntity`, `CardEntity`, `ProgressEntity`, `QuizAttemptEntity` and their DAOs in `core-database`. Configured Room schema export and verified export of v1 schema JSON. Built baseline `MigrationTest`. | Schema JSON generated successfully in `schemas/`. |
