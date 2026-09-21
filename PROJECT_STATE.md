@@ -11,9 +11,9 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 0 — Foundations |
-| Current step | 0.2 (next: Module skeleton) |
+| Current step | 0.3 (next: Core dependencies + Hilt) |
 | Last updated | 2026-09-21 |
-| Build status | passes assembleDebug |
+| Build status | passes assembleDebug with 12 modules |
 | Blocked on | nothing |
 | Next owner action required | none for Phase 0 (supply words_master.csv before 1.3) |
 
@@ -36,7 +36,7 @@ Never delete history from the session log or decision log. Append only.
 
 ### Phase 0 — Foundations
 - [x] 0.1 Gradle project + version catalog
-- [ ] 0.2 Module skeleton
+- [x] 0.2 Module skeleton
 - [ ] 0.3 Core dependencies + Hilt
 - [ ] 0.4 Design tokens + Bangla font verification
 - [ ] 0.5 Lint, detekt, CI
@@ -158,3 +158,4 @@ Append one row per completed step.
 |---|---|---|---|
 | — | — | project initialised with design docs | n/a |
 | 2026-09-21 | 0.1 | Configured Gradle 8.10.2, AGP 8.7.3, Kotlin 2.0.21, Compose, libs.versions.toml, app module with package com.shobdodaily.app, MainActivity | assembleDebug succeeded (BUILD SUCCESSFUL) |
+| 2026-09-21 | 0.2 | Created module skeleton (core-model, core-database, core-network, core-datastore, core-ui, core-billing, feature-auth, feature-home, feature-card, feature-history, feature-quiz, feature-paywall, pipeline/, supabase/) | gradlew projects & assembleDebug succeeded (DAG verified, 0 cycles) |

@@ -44,6 +44,23 @@ android {
 }
 
 dependencies {
+    // Core modules
+    implementation(project(":core:core-model"))
+    implementation(project(":core:core-ui"))
+    implementation(project(":core:core-database"))
+    implementation(project(":core:core-network"))
+    implementation(project(":core:core-datastore"))
+    implementation(project(":core:core-billing"))
+
+    // Feature modules
+    implementation(project(":feature:feature-auth"))
+    implementation(project(":feature:feature-home"))
+    implementation(project(":feature:feature-card"))
+    implementation(project(":feature:feature-history"))
+    implementation(project(":feature:feature-quiz"))
+    implementation(project(":feature:feature-paywall"))
+
+    // Compose & AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
