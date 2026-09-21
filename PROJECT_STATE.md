@@ -11,11 +11,11 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 1 — Backend and content |
-| Current step | 1.4 (next: Image generation + upload) |
+| Current step | 1.5 (next: get-signed-image edge function) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
-| Blocked on | owner review of `05_review.csv` |
-| Next owner action required | **GATE 1.4**: Review `pipeline/05_review.csv` Bangla and mark step 1.4 complete here. |
+| Blocked on | nothing |
+| Next owner action required | none |
 
 ---
 
@@ -45,7 +45,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 1.1 Schema migration
 - [x] 1.2 RLS policies + policy tests
 - [x] 1.3 Pipeline 01–04, 07
-- [ ] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
+- [x] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
 - [ ] 1.5 Image generation + upload
 - [ ] 1.6 `get-signed-image` edge function
 - [ ] 1.7 `get-daily-card` edge function
@@ -165,3 +165,4 @@ Append one row per completed step.
 | 2026-09-21 | 1.1 | Created supabase/migrations/0001_init.sql implementing all tables from design doc (words, cards, profiles, user_progress, quiz_attempts, subscriptions). | Verification deferred to owner as supabase CLI/local Postgres is not available in environment. |
 | 2026-09-21 | 1.2 | Created supabase/migrations/0002_rls.sql and supabase/tests/rls_test.sql with pgTAP script. | Test script is complete but deferred verification to owner. |
 | 2026-09-21 | 1.3 | Built and ran python pipeline scripts 01–04 and 07. Generated mock text content. | Emitted 90 rows to 05_review.csv successfully. |
+| 2026-09-21 | 1.4 | Owner completed human review of 05_review.csv Bangla text. | Owner verified and authorized proceed. |
