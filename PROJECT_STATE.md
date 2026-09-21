@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 2 — Auth and shell |
-| Current step | 2.5 (next: Navigation graph + deep link) |
+| Current step | 2.6 (next: Sign out + delete account) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -55,7 +55,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 2.2 Google sign-in (Credential Manager)
 - [x] 2.3 Session persistence
 - [x] 2.4 Profile creation on first login
-- [ ] 2.5 Navigation graph + deep link
+- [x] 2.5 Navigation graph + deep link
 - [ ] 2.6 Sign out + delete account
 
 ### Phase 3 — Home and daily card
@@ -173,3 +173,4 @@ Append one row per completed step.
 | 2026-09-21 | 2.2 | Added Credential Manager to feature-auth, built SupabaseAuthRepository, AuthViewModel, and LoginScreen UI with "Continue as Guest" fallback. Fixed KSP issue by exposing Supabase client as `api` in core-network. | AuthViewModelTest, assembleDebug, and testDebugUnitTest passed. |
 | 2026-09-21 | 2.3 | Exposed `sessionStatus` from AuthRepository and updated AuthViewModel to observe it reactively. Confirmed Supabase Kotlin v3 natively supports Android DataStore auto-restoration via `multiplatform-settings-android`. | Tests passed. |
 | 2026-09-21 | 2.4 | Created ProfileRepository and SupabaseProfileRepository to handle profile creation. Used upsert to create a default profile gracefully after a successful login in AuthViewModel. | Unit tests passed. |
+| 2026-09-21 | 2.5 | Set up Compose Type-Safe Navigation in `app` and `core-ui` using `kotlinx.serialization`. Created `AppNavGraph.kt` and wired the `shobdodaily://card/{dayIndex}` deep link to the DailyCard route. Connected `LoginScreen` to the central graph. | Compilation and unit tests passed. |
