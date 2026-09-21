@@ -11,9 +11,9 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 0 — Foundations |
-| Current step | 0.4 (next: Design tokens + Bangla font verification) |
+| Current step | 0.5 (next: Lint, detekt, CI) |
 | Last updated | 2026-09-21 |
-| Build status | passes assembleDebug & testDebugUnitTest with Hilt |
+| Build status | passes assembleDebug & unit tests with Bangla font tokens |
 | Blocked on | nothing |
 | Next owner action required | none for Phase 0 (supply words_master.csv before 1.3) |
 
@@ -38,7 +38,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 0.1 Gradle project + version catalog
 - [x] 0.2 Module skeleton
 - [x] 0.3 Core dependencies + Hilt
-- [ ] 0.4 Design tokens + Bangla font verification
+- [x] 0.4 Design tokens + Bangla font verification
 - [ ] 0.5 Lint, detekt, CI
 
 ### Phase 1 — Backend and content
@@ -160,3 +160,4 @@ Append one row per completed step.
 | 2026-09-21 | 0.1 | Configured Gradle 8.10.2, AGP 8.7.3, Kotlin 2.0.21, Compose, libs.versions.toml, app module with package com.shobdodaily.app, MainActivity | assembleDebug succeeded (BUILD SUCCESSFUL) |
 | 2026-09-21 | 0.2 | Created module skeleton (core-model, core-database, core-network, core-datastore, core-ui, core-billing, feature-auth, feature-home, feature-card, feature-history, feature-quiz, feature-paywall, pipeline/, supabase/) | gradlew projects & assembleDebug succeeded (DAG verified, 0 cycles) |
 | 2026-09-21 | 0.3 | Added Hilt (2.52) & KSP, ShobdoDailyApp (@HiltAndroidApp), MainActivity (@AndroidEntryPoint), Room 2.6.1 in core-database, DataStore 1.1.1 in core-datastore, Coil 3.0.4 & Navigation Compose in core-ui & app | assembleDebug & testDebugUnitTest succeeded |
+| 2026-09-21 | 0.4 | Implemented design tokens in core-ui (Color, Type, Spacing, Shape, Theme), bundled Noto Sans Bengali fonts, created BanglaFontPreview for conjuncts (ক্ষ ত্র জ্ঞ ঙ্গ), wired into MainActivity | :core:core-ui:testDebugUnitTest & assembleDebug succeeded |
