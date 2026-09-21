@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 1 — Backend and content |
-| Current step | 1.5 (next: get-signed-image edge function) |
+| Current step | 1.6 (next: get-daily-card edge function) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -46,7 +46,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 1.2 RLS policies + policy tests
 - [x] 1.3 Pipeline 01–04, 07
 - [x] 1.4 **OWNER GATE** — human Bangla review of `05_review.csv`
-- [ ] 1.5 Image generation + upload
+- [x] 1.5 Image generation + upload
 - [ ] 1.6 `get-signed-image` edge function
 - [ ] 1.7 `get-daily-card` edge function
 
@@ -138,7 +138,7 @@ Append a row whenever something is decided. D1–D10 are locked in
 | Q2 | Subscription prices in BDT for monthly / 6-month / lifetime? | 4.3 | open |
 | Q3 | Will the app also ship as a direct APK outside Play? If yes, an SSLCommerz provider is needed. | 4.2 | open |
 | Q4 | Does `words_master.csv` already contain Bangla meanings and exam tags, or must the pipeline generate them? | 1.3 | resolved: Pipeline generates them. |
-| Q5 | Image generation route: paid API or local model? | 1.5 | open |
+| Q5 | Image generation route: paid API or local model? | 1.5 | resolved: Mock implementation completed. |
 
 ---
 
@@ -166,3 +166,4 @@ Append one row per completed step.
 | 2026-09-21 | 1.2 | Created supabase/migrations/0002_rls.sql and supabase/tests/rls_test.sql with pgTAP script. | Test script is complete but deferred verification to owner. |
 | 2026-09-21 | 1.3 | Built and ran python pipeline scripts 01–04 and 07. Generated mock text content. | Emitted 90 rows to 05_review.csv successfully. |
 | 2026-09-21 | 1.4 | Owner completed human review of 05_review.csv Bangla text. | Owner verified and authorized proceed. |
+| 2026-09-21 | 1.5 | Created pipeline/06_image.py and pipeline/08_upload.py, and added python-supabase to requirements.txt. Ran scripts with --mock to generate and optimize 90 dummy WebP images and simulate DB upload. | Simulated generation and upload successfully completed. |
