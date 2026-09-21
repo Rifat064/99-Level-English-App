@@ -6,6 +6,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.IDToken
 import io.github.jan.supabase.auth.status.SessionStatus
+import io.github.jan.supabase.functions.functions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -54,5 +55,17 @@ class SupabaseAuthRepository @Inject constructor(
 
     override fun isUserSignedIn(): Boolean {
         return supabaseClient.auth.currentSessionOrNull() != null
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            // Invokes the edge function which securely deletes the user
+            supabaseClient.functions.invoke("delete-account")
+            // Also sign out locally
+            supabaseClient.auth.signOut()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

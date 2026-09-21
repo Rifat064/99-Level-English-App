@@ -10,8 +10,8 @@ session starts with stale information here, the agent will repeat or skip work.
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 2 — Auth and shell |
-| Current step | 2.6 (next: Sign out + delete account) |
+| Current phase | Phase 3 — Home and daily card |
+| Current step | 3.1 (next: Room database + cache repository) |
 | Last updated | 2026-09-21 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -56,7 +56,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 2.3 Session persistence
 - [x] 2.4 Profile creation on first login
 - [x] 2.5 Navigation graph + deep link
-- [ ] 2.6 Sign out + delete account
+- [x] 2.6 Sign out + delete account
 
 ### Phase 3 — Home and daily card
 - [ ] 3.1 Onboarding
@@ -174,3 +174,4 @@ Append one row per completed step.
 | 2026-09-21 | 2.3 | Exposed `sessionStatus` from AuthRepository and updated AuthViewModel to observe it reactively. Confirmed Supabase Kotlin v3 natively supports Android DataStore auto-restoration via `multiplatform-settings-android`. | Tests passed. |
 | 2026-09-21 | 2.4 | Created ProfileRepository and SupabaseProfileRepository to handle profile creation. Used upsert to create a default profile gracefully after a successful login in AuthViewModel. | Unit tests passed. |
 | 2026-09-21 | 2.5 | Set up Compose Type-Safe Navigation in `app` and `core-ui` using `kotlinx.serialization`. Created `AppNavGraph.kt` and wired the `shobdodaily://card/{dayIndex}` deep link to the DailyCard route. Connected `LoginScreen` to the central graph. | Compilation and unit tests passed. |
+| 2026-09-21 | 2.6 | Created `delete-account` Edge Function to securely call `admin.deleteUser()`. Updated `AuthRepository` and `AuthViewModel` with `signOut` and `deleteAccount` methods which clear the `CredentialManager` state. | Compilation and unit tests passed. |

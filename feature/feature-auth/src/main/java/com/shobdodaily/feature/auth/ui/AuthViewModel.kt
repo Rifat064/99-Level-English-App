@@ -1,6 +1,7 @@
 package com.shobdodaily.feature.auth.ui
 
 import android.content.Context
+import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -112,6 +113,40 @@ class AuthViewModel @Inject constructor(
                 _uiState.value = AuthUiState.Error(
                     result.exceptionOrNull()?.message ?: "Anonymous auth failed"
                 )
+            }
+        }
+    }
+
+    fun signOut(context: Context) {
+        viewModelScope.launch {
+            _uiState.value = AuthUiState.Loading
+            try {
+                val credentialManager = CredentialManager.create(context)
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                authRepository.signOut()
+                // The flow collector in checkAuthStatus will handle setting state to Idle
+            } catch (e: Exception) {
+                _uiState.value = AuthUiState.Error("Sign out failed: ${e.message}")
+            }
+        }
+    }
+
+    fun deleteAccount(context: Context) {
+        viewModelScope.launch {
+            _uiState.value = AuthUiState.Loading
+            try {
+                val credentialManager = CredentialManager.create(context)
+                val result = authRepository.deleteAccount()
+                if (result.isSuccess) {
+                    credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                    // The flow collector in checkAuthStatus will handle setting state to Idle
+                } else {
+                    _uiState.value = AuthUiState.Error(
+                        result.exceptionOrNull()?.message ?: "Delete account failed"
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.value = AuthUiState.Error("Delete account failed: ${e.message}")
             }
         }
     }
