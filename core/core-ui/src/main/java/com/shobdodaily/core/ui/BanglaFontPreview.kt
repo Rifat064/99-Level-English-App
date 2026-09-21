@@ -30,11 +30,12 @@ fun BanglaFontPreviewContent(modifier: Modifier = Modifier) {
     val spacing = LocalSpacing.current
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(spacing.lg),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(spacing.lg),
         verticalArrangement = Arrangement.spacedBy(spacing.md),
     ) {
         Text(
@@ -52,9 +53,10 @@ fun BanglaFontPreviewContent(modifier: Modifier = Modifier) {
 private fun ConjunctVerificationCard() {
     val spacing = LocalSpacing.current
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(spacing.md)) {
@@ -78,9 +80,10 @@ private fun ConjunctVerificationCard() {
 private fun SampleCardAnatomy() {
     val spacing = LocalSpacing.current
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
@@ -121,7 +124,10 @@ private fun SampleCardAnatomy() {
 }
 
 @Composable
-private fun WordTranslationRow(meaning: String, examTag: String) {
+private fun WordTranslationRow(
+    meaning: String,
+    examTag: String,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

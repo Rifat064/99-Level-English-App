@@ -10,10 +10,10 @@ session starts with stale information here, the agent will repeat or skip work.
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 0 — Foundations |
-| Current step | 0.5 (next: Lint, detekt, CI) |
+| Current phase | Phase 1 — Backend and content |
+| Current step | 1.1 (next: RLS policies + policy tests) |
 | Last updated | 2026-09-21 |
-| Build status | passes assembleDebug & unit tests with Bangla font tokens |
+| Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
 | Next owner action required | none for Phase 0 (supply words_master.csv before 1.3) |
 
@@ -39,7 +39,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 0.2 Module skeleton
 - [x] 0.3 Core dependencies + Hilt
 - [x] 0.4 Design tokens + Bangla font verification
-- [ ] 0.5 Lint, detekt, CI
+- [x] 0.5 Lint, detekt, CI
 
 ### Phase 1 — Backend and content
 - [ ] 1.1 Schema migration
@@ -161,3 +161,4 @@ Append one row per completed step.
 | 2026-09-21 | 0.2 | Created module skeleton (core-model, core-database, core-network, core-datastore, core-ui, core-billing, feature-auth, feature-home, feature-card, feature-history, feature-quiz, feature-paywall, pipeline/, supabase/) | gradlew projects & assembleDebug succeeded (DAG verified, 0 cycles) |
 | 2026-09-21 | 0.3 | Added Hilt (2.52) & KSP, ShobdoDailyApp (@HiltAndroidApp), MainActivity (@AndroidEntryPoint), Room 2.6.1 in core-database, DataStore 1.1.1 in core-datastore, Coil 3.0.4 & Navigation Compose in core-ui & app | assembleDebug & testDebugUnitTest succeeded |
 | 2026-09-21 | 0.4 | Implemented design tokens in core-ui (Color, Type, Spacing, Shape, Theme), bundled Noto Sans Bengali fonts, created BanglaFontPreview for conjuncts (ক্ষ ত্র জ্ঞ ঙ্গ), wired into MainActivity | :core:core-ui:testDebugUnitTest & assembleDebug succeeded |
+| 2026-09-21 | 0.5 | Set up CI workflow for ktlint and detekt, created .editorconfig to fix Compose naming, cleaned up empty package placeholders. | CI passes with linting, ktlintCheck, detekt, and testDebugUnitTest. |

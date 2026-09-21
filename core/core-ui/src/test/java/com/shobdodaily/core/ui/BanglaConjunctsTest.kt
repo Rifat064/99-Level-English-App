@@ -9,7 +9,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class BanglaConjunctsTest {
-
     @Test
     fun verifyRequiredConjuncts() {
         val conjuncts = listOf("ক্ষ", "ত্র", "জ্ঞ", "ঙ্গ")
@@ -31,7 +30,7 @@ class BanglaConjunctsTest {
         val spacing = Spacing()
         assertTrue(
             "Minimum touch target must be at least 48dp per design language",
-            spacing.minTouchTarget.value >= 48f
+            spacing.minTouchTarget.value >= 48f,
         )
     }
 }
