@@ -20,4 +20,9 @@ abstract class RepositoryModule {
     abstract fun bindCardRepository(
         offlineFirstCardRepository: com.shobdodaily.core.network.repository.OfflineFirstCardRepository
     ): com.shobdodaily.core.model.repository.CardRepository
+
+    @Binds
+    abstract fun bindProgressRepository(
+        offlineFirstProgressRepository: com.shobdodaily.core.network.repository.OfflineFirstProgressRepository
+    ): com.shobdodaily.core.model.repository.ProgressRepository
 }

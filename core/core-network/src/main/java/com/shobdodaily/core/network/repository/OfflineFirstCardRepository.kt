@@ -6,6 +6,8 @@ import com.shobdodaily.core.model.Card
 import com.shobdodaily.core.model.repository.CardRepository
 import com.shobdodaily.core.network.model.DailyCardPayloadDto
 import com.shobdodaily.core.network.model.toEntity
+import com.shobdodaily.core.model.DailyCardPayload
+import com.shobdodaily.core.model.Word
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.functions.functions
 import io.ktor.client.call.body
@@ -24,12 +26,14 @@ class OfflineFirstCardRepository @Inject constructor(
     private val wordDao: WordDao
 ) : CardRepository {
 
-    override fun observeCard(dayIndex: Int): Flow<Result<Card>> {
+    override fun observeCard(dayIndex: Int): Flow<Result<DailyCardPayload>> {
         return cardDao.observeCardByDayIndex(dayIndex).map { entity ->
             if (entity != null) {
-                // Map Entity back to Domain (need to add toDomain in Entity or map it here)
-                Result.success(
-                    Card(
+                val wordAEntity = wordDao.getWordById(entity.wordAId ?: 0)
+                val wordBEntity = wordDao.getWordById(entity.wordBId ?: 0)
+                
+                if (wordAEntity != null && wordBEntity != null) {
+                    val card = Card(
                         id = entity.id,
                         dayIndex = entity.dayIndex,
                         season = entity.season,
@@ -42,7 +46,35 @@ class OfflineFirstCardRepository @Inject constructor(
                         imageBlurhash = entity.imageBlurhash,
                         status = entity.status
                     )
-                )
+                    
+                    val wordA = Word(
+                        id = wordAEntity.id,
+                        word = wordAEntity.word,
+                        pos = wordAEntity.pos,
+                        bangla = wordAEntity.bangla,
+                        englishGloss = wordAEntity.englishGloss,
+                        examTag = wordAEntity.examTag,
+                        examCategory = wordAEntity.examCategory,
+                        difficulty = wordAEntity.difficulty,
+                        frequencyRank = wordAEntity.frequencyRank
+                    )
+                    
+                    val wordB = Word(
+                        id = wordBEntity.id,
+                        word = wordBEntity.word,
+                        pos = wordBEntity.pos,
+                        bangla = wordBEntity.bangla,
+                        englishGloss = wordBEntity.englishGloss,
+                        examTag = wordBEntity.examTag,
+                        examCategory = wordBEntity.examCategory,
+                        difficulty = wordBEntity.difficulty,
+                        frequencyRank = wordBEntity.frequencyRank
+                    )
+                    
+                    Result.success(DailyCardPayload(dayIndex, card, wordA, wordB))
+                } else {
+                    Result.failure(Exception("Words not found for card \$dayIndex"))
+                }
             } else {
                 Result.failure(Exception("Card not found in local database for day \$dayIndex"))
             }

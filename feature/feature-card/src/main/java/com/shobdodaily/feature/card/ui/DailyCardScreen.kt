@@ -1,5 +1,6 @@
 package com.shobdodaily.feature.card.ui
 
+import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,26 +12,35 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,17 +48,52 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.shobdodaily.core.model.Card as DailyCard
 import com.shobdodaily.core.model.DailyCardPayload
+import com.shobdodaily.core.model.UserProgress
 import com.shobdodaily.core.model.Word
 import com.shobdodaily.core.ui.theme.ShobdoDailyTheme
 import com.shobdodaily.feature.card.R
+import java.util.Locale
 
 @Composable
 fun DailyCardScreen(
-    payload: DailyCardPayload,
+    uiState: DailyCardUiState,
     onMarkAsLearned: () -> Unit,
+    onToggleBookmark: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    var tts: TextToSpeech? by remember { mutableStateOf(null) }
+
+    DisposableEffect(context) {
+        tts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts?.language = Locale.US
+            }
+        }
+        onDispose {
+            tts?.stop()
+            tts?.shutdown()
+        }
+    }
+
+    if (uiState.isLoading) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Loading...")
+        }
+        return
+    }
+    
+    val payload = uiState.payload
+    if (payload == null) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(uiState.error ?: "Failed to load card")
+        }
+        return
+    }
+
+    val isBookmarked = uiState.progress?.bookmarked == true
+    val isLearned = uiState.progress?.completed == true
 
     Column(
         modifier = modifier
@@ -90,19 +135,45 @@ fun DailyCardScreen(
                     )
                 }
             }
+            
+            // Bookmark Icon
+            IconButton(
+                onClick = onToggleBookmark,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Bookmark",
+                    tint = if (isBookmarked) Color.Red else MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
 
-        // English Sentence
+        // English Sentence with TTS
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "➡️", modifier = Modifier.padding(end = 8.dp))
             Text(
                 text = payload.card.sentenceEn,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
             )
+            IconButton(
+                onClick = {
+                    tts?.speak(payload.card.sentenceEn, TextToSpeech.QUEUE_FLUSH, null, null)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play TTS",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
         // Vocabulary to focus section
@@ -146,7 +217,7 @@ fun DailyCardScreen(
             Text(
                 text = payload.card.sentenceBn,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 28.dp) // align with text, skip emoji width
+                modifier = Modifier.padding(start = 28.dp)
             )
         }
 
@@ -155,14 +226,15 @@ fun DailyCardScreen(
         // Mark as learned Button
         Button(
             onClick = onMarkAsLearned,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLearned
         ) {
             Icon(
                 imageVector = Icons.Default.CheckCircle,
                 contentDescription = null,
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text(text = stringResource(R.string.mark_as_learned))
+            Text(text = if (isLearned) stringResource(R.string.mark_as_learned) else "Mark as learned")
         }
     }
 }
@@ -209,8 +281,9 @@ private fun WordRow(emoji: String, word: Word) {
 fun DailyCardScreenSmallPreview() {
     ShobdoDailyTheme {
         DailyCardScreen(
-            payload = getMockPayload(),
-            onMarkAsLearned = {}
+            uiState = DailyCardUiState(payload = getMockPayload(), isLoading = false),
+            onMarkAsLearned = {},
+            onToggleBookmark = {}
         )
     }
 }
@@ -220,8 +293,9 @@ fun DailyCardScreenSmallPreview() {
 fun DailyCardScreenLargePreview() {
     ShobdoDailyTheme {
         DailyCardScreen(
-            payload = getMockPayload(),
-            onMarkAsLearned = {}
+            uiState = DailyCardUiState(payload = getMockPayload(), isLoading = false),
+            onMarkAsLearned = {},
+            onToggleBookmark = {}
         )
     }
 }

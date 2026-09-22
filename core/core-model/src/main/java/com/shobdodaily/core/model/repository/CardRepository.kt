@@ -1,9 +1,10 @@
 package com.shobdodaily.core.model.repository
 
 import com.shobdodaily.core.model.Card
+import com.shobdodaily.core.model.DailyCardPayload
 import kotlinx.coroutines.flow.Flow
 
 interface CardRepository {
-    fun observeCard(dayIndex: Int): Flow<Result<Card>>
+    fun observeCard(dayIndex: Int): Flow<Result<DailyCardPayload>>
     suspend fun syncTodayCard(): Result<Unit>
 }
