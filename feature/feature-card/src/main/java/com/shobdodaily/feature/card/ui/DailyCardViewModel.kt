@@ -6,6 +6,7 @@ import com.shobdodaily.core.model.DailyCardPayload
 import com.shobdodaily.core.model.UserProgress
 import com.shobdodaily.core.model.repository.CardRepository
 import com.shobdodaily.core.model.repository.ProgressRepository
+import com.shobdodaily.core.model.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,8 @@ data class DailyCardUiState(
 @HiltViewModel
 class DailyCardViewModel @Inject constructor(
     private val cardRepository: CardRepository,
-    private val progressRepository: ProgressRepository
+    private val progressRepository: ProgressRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DailyCardUiState())
@@ -64,9 +66,14 @@ class DailyCardViewModel @Inject constructor(
     }
 
     fun markAsLearned() {
-        if (currentCardId == -1L) return
+        if (currentCardId == -1L || currentDayIndex == -1) return
         viewModelScope.launch {
-            progressRepository.markAsLearned(currentCardId)
+            // First mark as learned in progress repo
+            val result = progressRepository.markAsLearned(currentCardId)
+            result.onSuccess {
+                // Then record completion for streak in profile repo
+                profileRepository.recordCompletion(currentDayIndex)
+            }
         }
     }
 

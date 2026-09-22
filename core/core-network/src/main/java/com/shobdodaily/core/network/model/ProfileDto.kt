@@ -29,3 +29,10 @@ fun ProfileDto.toDomain() = Profile(
     longestStreak = longestStreak,
     lastCompletedDay = lastCompletedDay
 )
+
+@Serializable
+data class ProfileStreakUpdateDto(
+    @SerialName("streak_count") val streakCount: Int,
+    @SerialName("longest_streak") val longestStreak: Int,
+    @SerialName("last_completed_day") val lastCompletedDay: Int
+)

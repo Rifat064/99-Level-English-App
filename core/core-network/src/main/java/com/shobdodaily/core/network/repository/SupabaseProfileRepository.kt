@@ -50,4 +50,49 @@ class SupabaseProfileRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun recordCompletion(currentDayIndex: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val user = supabaseClient.auth.currentUserOrNull()
+                ?: return@withContext Result.failure(Exception("Not authenticated"))
+
+            val dto = supabaseClient.postgrest["profiles"]
+                .select {
+                    filter {
+                        eq("id", user.id)
+                    }
+                }
+                .decodeSingle<ProfileDto>()
+
+            if (dto.lastCompletedDay >= currentDayIndex) {
+                // Already completed today or later, do nothing
+                return@withContext Result.success(Unit)
+            }
+
+            val diff = currentDayIndex - dto.lastCompletedDay
+            val newStreakCount = when (diff) {
+                1, 2 -> dto.streakCount + 1
+                else -> 1
+            }
+
+            val newLongestStreak = maxOf(dto.longestStreak, newStreakCount)
+
+            val updateDto = com.shobdodaily.core.network.model.ProfileStreakUpdateDto(
+                streakCount = newStreakCount,
+                longestStreak = newLongestStreak,
+                lastCompletedDay = currentDayIndex
+            )
+
+            supabaseClient.postgrest["profiles"]
+                .update(updateDto) {
+                    filter {
+                        eq("id", user.id)
+                    }
+                }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

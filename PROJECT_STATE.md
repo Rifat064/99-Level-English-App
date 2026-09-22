@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 3 — Home and daily card |
-| Current step | 3.7 (next: Archive/History screen) |
+| Current step | 3.8 (next: Daily notification) |
 | Last updated | 2026-09-22 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -65,7 +65,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 3.4 Offline-first CardRepository
 - [x] 3.5 Daily card UI
 - [x] 3.6 Learned / bookmark / TTS
-- [ ] 3.7 Streak logic
+- [x] 3.7 Streak logic
 - [ ] 3.8 Daily notification
 
 ### Phase 4 — History, paywall, payment
@@ -181,3 +181,4 @@ Append one row per completed step.
 | 2026-09-21 | 3.4 | Implemented `CardRepository` and `OfflineFirstCardRepository` in `core-network`. Bound to Hilt in `RepositoryModule`. Added coroutines dependency to `core-model`. | testDebugUnitTest for core-network passed. |
 | 2026-09-22 | 3.5 | Built DailyCardScreen UI with image, blurhash placeholder, speech bubble overlay, English/Bangla text, and vocabulary blocks. Extracted strings to values/ and values-bn/. Added coil-compose dependency. | UI layout visually mapped in Compose Previews; assembleDebug succeeded. |
 | 2026-09-22 | 3.6 | Implemented "Mark as learned" (writes `user_progress`), bookmark toggle, and TTS playback of `sentence_en` in DailyCardScreen and ViewModel. | assembleDebug succeeded. |
+| 2026-09-22 | 3.7 | Implemented streak logic in ProfileRepository (increment, 1-day grace period, reset). Wired into DailyCardViewModel to update streak on markAsLearned. | assembleDebug passed. |
