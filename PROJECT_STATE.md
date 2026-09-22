@@ -11,8 +11,8 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 3 — Home and daily card |
-| Current step | 3.5 (next: Daily card UI) |
-| Last updated | 2026-09-21 |
+| Current step | 3.6 (next: Learned / bookmark / TTS) |
+| Last updated | 2026-09-22 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
 | Next owner action required | none |
@@ -63,7 +63,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 3.2 Home + "Start your journey"
 - [x] 3.3 Room schema
 - [x] 3.4 Offline-first CardRepository
-- [ ] 3.5 Daily card UI
+- [x] 3.5 Daily card UI
 - [ ] 3.6 Learned / bookmark / TTS
 - [ ] 3.7 Streak logic
 - [ ] 3.8 Daily notification
@@ -179,3 +179,4 @@ Append one row per completed step.
 | 2026-09-21 | 3.2 | Built `HomeScreen` with streak widget, status chip, and 'Start your journey' button. Added `getProfile()` to `ProfileRepository` without `userId` param, enforcing strict module decoupling. Implemented `HomeViewModel` to fetch profile. | Compilation and unit tests passed. |
 | 2026-09-21 | 3.3 | Built `WordEntity`, `CardEntity`, `ProgressEntity`, `QuizAttemptEntity` and their DAOs in `core-database`. Configured Room schema export and verified export of v1 schema JSON. Built baseline `MigrationTest`. | Schema JSON generated successfully in `schemas/`. |
 | 2026-09-21 | 3.4 | Implemented `CardRepository` and `OfflineFirstCardRepository` in `core-network`. Bound to Hilt in `RepositoryModule`. Added coroutines dependency to `core-model`. | testDebugUnitTest for core-network passed. |
+| 2026-09-22 | 3.5 | Built DailyCardScreen UI with image, blurhash placeholder, speech bubble overlay, English/Bangla text, and vocabulary blocks. Extracted strings to values/ and values-bn/. Added coil-compose dependency. | UI layout visually mapped in Compose Previews; assembleDebug succeeded. |

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vocabulary_to_focus">Vocabulary to focus</string>
+    <string name="whats_happening">What\'s happening</string>
+    <string name="mark_as_learned">Mark as learned</string>
+</resources>

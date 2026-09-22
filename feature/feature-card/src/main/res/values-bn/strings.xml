@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vocabulary_to_focus">আজকের শব্দ</string>
+    <string name="whats_happening">কী ঘটছে</string>
+    <string name="mark_as_learned">শেখা হয়েছে</string>
+</resources>
