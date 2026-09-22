@@ -75,6 +75,11 @@ fun AppNavGraph(
                     navController.navigate(Splash) {
                         popUpTo(Login) { inclusive = true }
                     }
+                },
+                onGuestContinue = {
+                    navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                        popUpTo(Login) { inclusive = true }
+                    }
                 }
             )
         }

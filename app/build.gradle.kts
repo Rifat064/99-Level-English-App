@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sentry.android.gradle)
 }
 
 val localProperties = Properties().apply {
@@ -29,6 +30,7 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["sentryDsn"] = localProperties.getProperty("SENTRY_DSN", "")
     }
 
     buildTypes {
@@ -95,6 +97,9 @@ dependencies {
     // Image loading
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Crash Reporting
+    implementation(libs.sentry.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

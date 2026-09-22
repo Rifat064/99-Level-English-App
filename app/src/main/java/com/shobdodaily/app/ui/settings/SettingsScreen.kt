@@ -176,6 +176,15 @@ fun SettingsScreen(
                     Text("Delete Account")
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = { throw RuntimeException("Test Crash") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+            ) {
+                Text("Test Crash (Dev Only)")
+            }
         }
     }
 }

@@ -31,11 +31,24 @@ class SupabaseProfileRepository @Inject constructor(
         }
     }
 
+    @androidx.annotation.RequiresApi(26)
     override suspend fun getProfile(): Result<com.shobdodaily.core.model.Profile> = withContext(Dispatchers.IO) {
         try {
             val user = supabaseClient.auth.currentUserOrNull()
             if (user == null) {
-                return@withContext Result.failure(Exception("Not authenticated"))
+                return@withContext Result.success(
+                    com.shobdodaily.core.model.Profile(
+                        id = "guest",
+                        displayName = "Guest Learner",
+                        enrolledAt = java.time.Instant.now(),
+                        wordsPerDay = 2,
+                        timezone = "Asia/Dhaka",
+                        notifyHour = 8,
+                        streakCount = 0,
+                        longestStreak = 0,
+                        lastCompletedDay = 0
+                    )
+                )
             }
             
             val dto = supabaseClient.postgrest["profiles"]

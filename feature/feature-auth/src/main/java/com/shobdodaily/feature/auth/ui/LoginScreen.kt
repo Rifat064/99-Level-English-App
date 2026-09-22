@@ -32,6 +32,7 @@ import com.shobdodaily.core.ui.R as CoreUiR
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
+    onGuestContinue: () -> Unit = {},
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -95,7 +96,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextButton(
-                    onClick = { viewModel.signInAnonymously() },
+                    onClick = { onGuestContinue() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Continue as Guest")
