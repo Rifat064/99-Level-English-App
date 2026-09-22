@@ -19,4 +19,7 @@ interface WordDao {
 
     @Query("DELETE FROM words")
     suspend fun clearWords()
+
+    @Query("SELECT * FROM words")
+    suspend fun getAllWords(): List<WordEntity>
 }

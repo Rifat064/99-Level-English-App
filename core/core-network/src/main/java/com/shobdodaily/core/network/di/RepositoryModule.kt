@@ -25,4 +25,9 @@ abstract class RepositoryModule {
     abstract fun bindProgressRepository(
         offlineFirstProgressRepository: com.shobdodaily.core.network.repository.OfflineFirstProgressRepository
     ): com.shobdodaily.core.model.repository.ProgressRepository
+
+    @Binds
+    abstract fun bindQuizRepository(
+        offlineFirstQuizRepository: com.shobdodaily.core.network.repository.OfflineFirstQuizRepository
+    ): com.shobdodaily.core.model.repository.QuizRepository
 }

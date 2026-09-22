@@ -12,6 +12,6 @@ interface QuizAttemptDao {
     @Query("SELECT * FROM quiz_attempts WHERE userId = :userId AND weekIndex = :weekIndex")
     fun observeQuizAttempt(userId: String, weekIndex: Int): Flow<QuizAttemptEntity?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAttempt(attempt: QuizAttemptEntity)
 }

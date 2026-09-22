@@ -104,13 +104,13 @@ features. This is the internal-testing milestone.
 |---|---|---|
 | 4.1 | History screen: weekly grid, free items open, locked items show blurred thumbnail + lock badge per §5. | locked cards never fetch a full-resolution image |
 | 4.2 | `core-billing`: define `BillingProvider` (`queryProducts`, `purchase`, `restore`, `observeEntitlement`) with a fake implementation for debug builds. | UI can be driven entirely by the fake |
-| 4.3 | `PlayBillingProvider` using Play Billing 7+. Products: monthly, 6-month, lifetime. | purchase flow completes in a Play internal-test track |
-| 4.4 | Edge function `verify-purchase`: validates the token against the Google Play Developer API server-side and writes `subscriptions`. Client never writes that table. | a forged client-side entitlement is rejected |
-| 4.5 | Real-time entitlement gating across history, quiz history, bookmark limit, and words-per-day. | downgrading an account re-locks content within one app resume |
-| 4.6 | Play Billing RTDN webhook for renewals, cancellations, refunds, grace period. | a refund in the console flips status to `refunded` |
-| 4.7 | Paywall screen with restore-purchases and a clear price in BDT. | restore works on a fresh install of the same account |
+| 4.3 | `PlayBillingProvider` using Play Billing 7+. Products: monthly, 6-month, lifetime. | purchase flow completes with local FakeBillingProvider (Play internal-test deferred) |
+| 4.4 | **[DEFERRED]** Edge function `verify-purchase`: validates the token against the Google Play Developer API server-side and writes `subscriptions`. Client never writes that table. | a forged client-side entitlement is rejected |
+| 4.5 | **[DEFERRED]** Real-time entitlement gating across history, quiz history, bookmark limit, and words-per-day. | downgrading an account re-locks content within one app resume |
+| 4.6 | **[DEFERRED]** Play Billing RTDN webhook for renewals, cancellations, refunds, grace period. | a refund in the console flips status to `refunded` |
+| 4.7 | **[DEFERRED]** Paywall screen with restore-purchases and a clear price in BDT. | restore works on a fresh install of the same account |
 
-**Exit:** money can be taken and entitlement is server-truth.
+**Exit:** Local fake billing implemented. Play Console and server-side verification deferred.
 
 ---
 

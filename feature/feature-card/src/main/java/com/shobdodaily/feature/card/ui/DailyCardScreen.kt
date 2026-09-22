@@ -45,6 +45,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import android.content.Intent
+import androidx.core.content.FileProvider
+import java.io.File
+import java.io.FileOutputStream
+import androidx.compose.material.icons.filled.Share
 import coil3.compose.AsyncImage
 import com.shobdodaily.core.model.Card as DailyCard
 import com.shobdodaily.core.model.DailyCardPayload
@@ -95,11 +113,34 @@ fun DailyCardScreen(
     val isBookmarked = uiState.progress?.bookmarked == true
     val isLearned = uiState.progress?.completed == true
 
+    val graphicsLayer = rememberGraphicsLayer()
+    val coroutineScope = rememberCoroutineScope()
+    val textMeasurer = rememberTextMeasurer()
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(16.dp),
+            .padding(16.dp)
+            .drawWithContent {
+                graphicsLayer.record {
+                    this@drawWithContent.drawContent()
+                    if (!uiState.isSubscriber) {
+                        val textLayoutResult = textMeasurer.measure(
+                            text = "ShobdoDaily (Free Version)",
+                            style = TextStyle(fontSize = 14.sp, color = Color.White.copy(alpha = 0.7f), fontWeight = FontWeight.Bold)
+                        )
+                        drawText(
+                            textLayoutResult = textLayoutResult,
+                            topLeft = Offset(
+                                x = size.width - textLayoutResult.size.width - 16.dp.toPx(),
+                                y = size.height - textLayoutResult.size.height - 16.dp.toPx()
+                            )
+                        )
+                    }
+                }
+                drawContent()
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -136,18 +177,61 @@ fun DailyCardScreen(
                 }
             }
             
-            // Bookmark Icon
-            IconButton(
-                onClick = onToggleBookmark,
+            Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
             ) {
-                Icon(
-                    imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Bookmark",
-                    tint = if (isBookmarked) Color.Red else MaterialTheme.colorScheme.onSurface
-                )
+                // Share Icon
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            try {
+                                val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+                                withContext(Dispatchers.IO) {
+                                    val cachePath = File(context.cacheDir, "images")
+                                    cachePath.mkdirs()
+                                    val file = File(cachePath, "shared_card.jpg")
+                                    val stream = FileOutputStream(file)
+                                    bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, stream)
+                                    stream.close()
+                                    
+                                    val uri = FileProvider.getUriForFile(
+                                        context,
+                                        "${context.packageName}.fileprovider",
+                                        file
+                                    )
+                                    
+                                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "image/jpeg"
+                                        putExtra(Intent.EXTRA_STREAM, uri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    
+                                    context.startActivity(Intent.createChooser(shareIntent, "Share your Daily Card"))
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                // Bookmark Icon
+                IconButton(
+                    onClick = onToggleBookmark
+                ) {
+                    Icon(
+                        imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Bookmark",
+                        tint = if (isBookmarked) Color.Red else MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
 

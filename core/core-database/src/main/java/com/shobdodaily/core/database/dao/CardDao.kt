@@ -20,4 +20,11 @@ interface CardDao {
 
     @Query("DELETE FROM cards")
     suspend fun clearCards()
+
+    @androidx.room.Transaction
+    @Query("SELECT * FROM cards WHERE dayIndex <= :limitDayIndex ORDER BY dayIndex DESC")
+    fun observeHistoryCards(limitDayIndex: Int): Flow<List<com.shobdodaily.core.database.model.HistoryCardEntity>>
+
+    @Query("SELECT * FROM cards WHERE dayIndex BETWEEN :startDay AND :endDay")
+    suspend fun getCardsForWeek(startDay: Int, endDay: Int): List<CardEntity>
 }

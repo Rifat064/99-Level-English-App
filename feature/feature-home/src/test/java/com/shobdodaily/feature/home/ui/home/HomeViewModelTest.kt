@@ -22,6 +22,7 @@ import java.time.Instant
 class HomeViewModelTest {
 
     private val profileRepository = mockk<ProfileRepository>()
+    private val notificationScheduler = mockk<com.shobdodaily.core.model.repository.NotificationScheduler>(relaxed = true)
     private lateinit var viewModel: HomeViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -51,7 +52,7 @@ class HomeViewModelTest {
         
         coEvery { profileRepository.getProfile() } returns Result.success(testProfile)
 
-        viewModel = HomeViewModel(profileRepository)
+        viewModel = HomeViewModel(profileRepository, notificationScheduler)
         
         testScheduler.advanceUntilIdle()
 
@@ -65,7 +66,7 @@ class HomeViewModelTest {
     fun `loadProfile transitions to Error when profile fetching fails`() = runTest {
         coEvery { profileRepository.getProfile() } returns Result.failure(Exception("Failed"))
 
-        viewModel = HomeViewModel(profileRepository)
+        viewModel = HomeViewModel(profileRepository, notificationScheduler)
         
         testScheduler.advanceUntilIdle()
 

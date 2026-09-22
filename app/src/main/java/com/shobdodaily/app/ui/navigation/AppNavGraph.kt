@@ -105,11 +105,22 @@ fun AppNavGraph(
         }
 
         composable<Quiz> {
-            PlaceholderScreen("Quiz")
+            com.shobdodaily.feature.quiz.presentation.QuizRoute(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable<History> {
-            PlaceholderScreen("History")
+            com.shobdodaily.feature.history.ui.HistoryScreen(
+                onCardClick = { dayIndex ->
+                    navController.navigate(DailyCard(dayIndex))
+                },
+                onNavigateToReview = {
+                    navController.navigate(com.shobdodaily.core.ui.navigation.ReviewDeck)
+                }
+            )
         }
 
         composable<Settings> {
@@ -118,6 +129,14 @@ fun AppNavGraph(
 
         composable<Paywall> {
             PlaceholderScreen("Paywall")
+        }
+
+        composable<com.shobdodaily.core.ui.navigation.ReviewDeck> {
+            com.shobdodaily.feature.history.review.ReviewDeckRoute(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

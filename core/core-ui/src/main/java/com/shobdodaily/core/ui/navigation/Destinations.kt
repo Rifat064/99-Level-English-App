@@ -30,3 +30,6 @@ object Settings : Destination
 
 @Serializable
 object Paywall : Destination
+
+@Serializable
+object ReviewDeck : Destination

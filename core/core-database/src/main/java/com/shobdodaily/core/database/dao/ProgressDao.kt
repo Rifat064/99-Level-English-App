@@ -15,6 +15,9 @@ interface ProgressDao {
     @Query("SELECT * FROM user_progress WHERE userId = :userId AND cardId = :cardId")
     suspend fun getProgress(userId: String, cardId: Long): ProgressEntity?
 
+    @Query("SELECT * FROM user_progress WHERE userId = :userId")
+    suspend fun getAllProgressForUser(userId: String): List<ProgressEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertProgress(progress: ProgressEntity)
 }

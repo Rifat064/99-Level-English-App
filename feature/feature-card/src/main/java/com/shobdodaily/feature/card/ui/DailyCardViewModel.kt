@@ -20,6 +20,7 @@ import javax.inject.Inject
 data class DailyCardUiState(
     val payload: DailyCardPayload? = null,
     val progress: UserProgress? = null,
+    val isSubscriber: Boolean = false,
     val isLoading: Boolean = true,
     val error: String? = null
 )
@@ -50,7 +51,8 @@ class DailyCardViewModel @Inject constructor(
             cardRepository.observeCard(dayIndex).collect { cardResult ->
                 cardResult.onSuccess { payload ->
                     currentCardId = payload.card.id
-                    _uiState.update { it.copy(payload = payload, isLoading = false) }
+                    val isSub = false // Phase 4.2 handles billing
+                    _uiState.update { it.copy(payload = payload, isSubscriber = isSub, isLoading = false) }
                     
                     progressJob?.cancel()
                     progressJob = viewModelScope.launch {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3a43d1492f0f055a4c8571f93cbd5cd0",
+    "identityHash": "95579305f1c8cd4fcc190c86486c5fbe",
     "entities": [
       {
         "tableName": "cards",
@@ -268,14 +268,25 @@
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_quiz_attempts_userId_weekIndex",
+            "unique": true,
+            "columnNames": [
+              "userId",
+              "weekIndex"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_quiz_attempts_userId_weekIndex` ON `${TABLE_NAME}` (`userId`, `weekIndex`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a43d1492f0f055a4c8571f93cbd5cd0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '95579305f1c8cd4fcc190c86486c5fbe')"
     ]
   }
 }
