@@ -10,8 +10,8 @@ session starts with stale information here, the agent will repeat or skip work.
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 3 — Home and daily card |
-| Current step | 3.8 (next: Daily notification) |
+| Current phase | Phase 4 — History, paywall, payment |
+| Current step | 4.1 (next: History screen + locking) |
 | Last updated | 2026-09-22 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -66,7 +66,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 3.5 Daily card UI
 - [x] 3.6 Learned / bookmark / TTS
 - [x] 3.7 Streak logic
-- [ ] 3.8 Daily notification
+- [x] 3.8 Daily notification
 
 ### Phase 4 — History, paywall, payment
 - [ ] 4.1 History screen + locking
@@ -182,3 +182,4 @@ Append one row per completed step.
 | 2026-09-22 | 3.5 | Built DailyCardScreen UI with image, blurhash placeholder, speech bubble overlay, English/Bangla text, and vocabulary blocks. Extracted strings to values/ and values-bn/. Added coil-compose dependency. | UI layout visually mapped in Compose Previews; assembleDebug succeeded. |
 | 2026-09-22 | 3.6 | Implemented "Mark as learned" (writes `user_progress`), bookmark toggle, and TTS playback of `sentence_en` in DailyCardScreen and ViewModel. | assembleDebug succeeded. |
 | 2026-09-22 | 3.7 | Implemented streak logic in ProfileRepository (increment, 1-day grace period, reset). Wired into DailyCardViewModel to update streak on markAsLearned. | assembleDebug passed. |
+| 2026-09-22 | 3.8 | Added WorkManager + Hilt dependencies. Created NotificationWorker to show daily card notification with deep link. Created BootReceiver and NotificationScheduler. Wired scheduler into HomeViewModel on profile load. | assembleDebug passed. |

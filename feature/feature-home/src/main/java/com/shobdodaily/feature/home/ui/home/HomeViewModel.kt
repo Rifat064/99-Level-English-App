@@ -13,6 +13,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import com.shobdodaily.core.model.repository.NotificationScheduler
 
 sealed interface HomeUiState {
     object Loading : HomeUiState
@@ -26,7 +27,8 @@ sealed interface HomeUiState {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val notificationScheduler: NotificationScheduler
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -52,6 +54,9 @@ class HomeViewModel @Inject constructor(
                 val currentDayIndex = maxOf(1, daysDifference + 1)
                 
                 val isTodayCompleted = profile.lastCompletedDay >= currentDayIndex
+
+                // Schedule or update daily notification based on profile setting
+                notificationScheduler.scheduleDailyNotification(profile.notifyHour)
 
                 _uiState.value = HomeUiState.Success(
                     profile = profile,
