@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +49,7 @@ import com.shobdodaily.core.model.HistoryCardItem
 fun HistoryScreen(
     onCardClick: (Int) -> Unit,
     onNavigateToReview: () -> Unit,
+    onNavigateToDictionary: () -> Unit,
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -59,10 +61,18 @@ fun HistoryScreen(
                 title = { Text("History") },
                 actions = {
                     androidx.compose.material3.IconButton(
+                        onClick = onNavigateToDictionary
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Dictionary"
+                        )
+                    }
+                    androidx.compose.material3.IconButton(
                         onClick = onNavigateToReview
                     ) {
                         androidx.compose.material3.Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.CheckCircle,
+                            imageVector = Icons.Default.CheckCircle,
                             contentDescription = "Review Deck"
                         )
                     }

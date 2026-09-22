@@ -22,4 +22,15 @@ interface WordDao {
 
     @Query("SELECT * FROM words")
     suspend fun getAllWords(): List<WordEntity>
+
+    @Query("""
+        SELECT * FROM words 
+        WHERE (:query = '' OR word LIKE '%' || :query || '%' OR bangla LIKE '%' || :query || '%' OR englishGloss LIKE '%' || :query || '%')
+        AND (:tag IS NULL OR examTag LIKE '%' || :tag || '%')
+        ORDER BY word ASC
+    """)
+    fun searchWords(query: String, tag: String?): kotlinx.coroutines.flow.Flow<List<WordEntity>>
+
+    @Query("SELECT DISTINCT examTag FROM words WHERE examTag IS NOT NULL AND examTag != '' ORDER BY examTag ASC")
+    fun getExamTags(): kotlinx.coroutines.flow.Flow<List<String>>
 }

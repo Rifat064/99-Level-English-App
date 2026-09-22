@@ -11,8 +11,8 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 6 — Retention |
-| Current step | 6.3 (next: Exam-tag filter + search) |
-| Last updated | 2026-09-22 |
+| Current step | 6.4 (next: Settings) |
+| Last updated | 2026-09-23 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
 | Next owner action required | none |
@@ -86,7 +86,7 @@ Never delete history from the session log or decision log. Append only.
 ### Phase 6 — Retention
 - [x] 6.1 Spaced repetition
 - [x] 6.2 Share as image
-- [ ] 6.3 Exam-tag filter + search
+- [x] 6.3 Exam-tag filter + search
 - [ ] 6.4 Settings
 - [ ] 6.5 Catch-up flow
 
@@ -193,3 +193,4 @@ Append one row per completed step.
 | 2026-09-22 | 5.4 | Created QuizResultsScreen. Updated QuizAttemptEntity with a unique index on (userId, weekIndex). Used IGNORE conflict strategy to prevent duplicate attempts. Updated QuizViewModel to compute and save scores. | assembleDebug passed. |
 | 2026-09-22 | 6.1 | Implemented Spaced-repetition review deck. Added ReviewScheduler. Added ReviewDeckViewModel and UI. Updated ProgressRepository and QuizViewModel (<60% missed words push to review). | assembleDebug passed. |
 | 2026-09-22 | 6.2 | Implemented Share-as-image. Used Compose GraphicsLayer to capture UI. Configured FileProvider. Added free-user watermark via TextMeasurer during GraphicsLayer record phase. | assembleDebug passed. |
+| 2026-09-23 | 6.3 | Implemented DictionaryScreen with search and exam-tag filtering. Added OfflineFirstWordRepository and WordDao queries. Added entry point from HistoryScreen TopAppBar. | assembleDebug passed. |

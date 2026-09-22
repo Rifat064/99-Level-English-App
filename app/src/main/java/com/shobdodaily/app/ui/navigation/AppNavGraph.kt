@@ -20,7 +20,9 @@ import com.shobdodaily.core.ui.navigation.Paywall
 import com.shobdodaily.core.ui.navigation.Quiz
 import com.shobdodaily.core.ui.navigation.Settings
 import com.shobdodaily.core.ui.navigation.Splash
+import com.shobdodaily.core.ui.navigation.Dictionary
 import com.shobdodaily.feature.auth.ui.LoginScreen
+import com.shobdodaily.feature.history.dictionary.DictionaryScreen
 import com.shobdodaily.feature.home.ui.home.HomeScreen
 import com.shobdodaily.feature.home.ui.onboarding.OnboardingScreen
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -119,6 +121,9 @@ fun AppNavGraph(
                 },
                 onNavigateToReview = {
                     navController.navigate(com.shobdodaily.core.ui.navigation.ReviewDeck)
+                },
+                onNavigateToDictionary = {
+                    navController.navigate(Dictionary)
                 }
             )
         }
@@ -133,6 +138,14 @@ fun AppNavGraph(
 
         composable<com.shobdodaily.core.ui.navigation.ReviewDeck> {
             com.shobdodaily.feature.history.review.ReviewDeckRoute(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Dictionary> {
+            DictionaryScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }

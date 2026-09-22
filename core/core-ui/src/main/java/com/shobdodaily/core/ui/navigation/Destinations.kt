@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 sealed interface Destination
 
 @Serializable
+object Dictionary : Destination
+
+@Serializable
 object Splash : Destination
 
 @Serializable

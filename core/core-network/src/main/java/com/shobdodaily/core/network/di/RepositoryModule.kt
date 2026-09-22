@@ -30,4 +30,9 @@ abstract class RepositoryModule {
     abstract fun bindQuizRepository(
         offlineFirstQuizRepository: com.shobdodaily.core.network.repository.OfflineFirstQuizRepository
     ): com.shobdodaily.core.model.repository.QuizRepository
+
+    @Binds
+    abstract fun bindWordRepository(
+        offlineFirstWordRepository: com.shobdodaily.core.network.repository.OfflineFirstWordRepository
+    ): com.shobdodaily.core.model.repository.WordRepository
 }
