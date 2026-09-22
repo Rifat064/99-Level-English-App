@@ -85,9 +85,7 @@ fun DailyCardScreen(
 
     DisposableEffect(context) {
         tts = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts?.language = Locale.US
-            }
+            // initialized
         }
         onDispose {
             tts?.stop()
@@ -249,6 +247,12 @@ fun DailyCardScreen(
             )
             IconButton(
                 onClick = {
+                    val locale = when (uiState.ttsAccent) {
+                        "en-GB" -> Locale.UK
+                        "en-IN" -> Locale("en", "IN")
+                        else -> Locale.US
+                    }
+                    tts?.language = locale
                     tts?.speak(payload.card.sentenceEn, TextToSpeech.QUEUE_FLUSH, null, null)
                 }
             ) {

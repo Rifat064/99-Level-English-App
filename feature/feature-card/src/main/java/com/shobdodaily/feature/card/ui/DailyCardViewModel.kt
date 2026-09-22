@@ -7,6 +7,7 @@ import com.shobdodaily.core.model.UserProgress
 import com.shobdodaily.core.model.repository.CardRepository
 import com.shobdodaily.core.model.repository.ProgressRepository
 import com.shobdodaily.core.model.repository.ProfileRepository
+import com.shobdodaily.core.datastore.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,14 +23,16 @@ data class DailyCardUiState(
     val progress: UserProgress? = null,
     val isSubscriber: Boolean = false,
     val isLoading: Boolean = true,
-    val error: String? = null
+    val error: String? = null,
+    val ttsAccent: String = "en-US"
 )
 
 @HiltViewModel
 class DailyCardViewModel @Inject constructor(
     private val cardRepository: CardRepository,
     private val progressRepository: ProgressRepository,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DailyCardUiState())
@@ -39,6 +42,14 @@ class DailyCardViewModel @Inject constructor(
     private var currentCardId: Long = -1L
 
     private var progressJob: kotlinx.coroutines.Job? = null
+
+    init {
+        viewModelScope.launch {
+            settingsRepository.ttsAccent.collect { accent ->
+                _uiState.update { it.copy(ttsAccent = accent) }
+            }
+        }
+    }
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     fun loadCard(dayIndex: Int) {

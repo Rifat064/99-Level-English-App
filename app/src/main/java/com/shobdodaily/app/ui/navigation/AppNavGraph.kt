@@ -25,6 +25,7 @@ import com.shobdodaily.feature.auth.ui.LoginScreen
 import com.shobdodaily.feature.history.dictionary.DictionaryScreen
 import com.shobdodaily.feature.home.ui.home.HomeScreen
 import com.shobdodaily.feature.home.ui.onboarding.OnboardingScreen
+import com.shobdodaily.app.ui.settings.SettingsScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.LaunchedEffect
@@ -129,7 +130,14 @@ fun AppNavGraph(
         }
 
         composable<Settings> {
-            PlaceholderScreen("Settings")
+            SettingsScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onSignOut = {
+                    navController.navigate(Splash) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
         }
 
         composable<Paywall> {

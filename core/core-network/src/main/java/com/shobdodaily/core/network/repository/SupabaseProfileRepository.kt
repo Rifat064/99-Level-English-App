@@ -95,4 +95,40 @@ class SupabaseProfileRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun updateNotifyHour(hour: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val user = supabaseClient.auth.currentUserOrNull()
+                ?: return@withContext Result.failure(Exception("Not authenticated"))
+
+            supabaseClient.postgrest["profiles"].update(
+                mapOf("notify_hour" to hour)
+            ) {
+                filter {
+                    eq("id", user.id)
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateWordsPerDay(words: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val user = supabaseClient.auth.currentUserOrNull()
+                ?: return@withContext Result.failure(Exception("Not authenticated"))
+
+            supabaseClient.postgrest["profiles"].update(
+                mapOf("words_per_day" to words)
+            ) {
+                filter {
+                    eq("id", user.id)
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
