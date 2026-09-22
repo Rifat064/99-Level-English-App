@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -127,6 +128,43 @@ private fun HomeContent(
     }
     Spacer(modifier = Modifier.height(24.dp))
 
+    // Catch-up Section
+    if (state.missedDaysCount > 0) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Warning, contentDescription = "Missed", tint = MaterialTheme.colorScheme.error)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "You are ${state.missedDaysCount} days behind",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+                if (state.missedDaysLost > 0) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "(${state.missedDaysLost} older days are locked in the premium archive)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { state.catchUpDayIndex?.let { onNavigateToCard(it) } },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Catch Up Now")
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+
     // Today's Status Chip
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -147,29 +185,34 @@ private fun HomeContent(
             Icon(
                 imageVector = Icons.Default.Warning,
                 contentDescription = "Not Completed",
-                tint = MaterialTheme.colorScheme.error
+                tint = if (state.missedDaysCount > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error
             )
             Text(
                 text = " Today's card is waiting for you.",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.error
+                color = if (state.missedDaysCount > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error
             )
         }
     }
     Spacer(modifier = Modifier.height(32.dp))
 
-    // Primary Button
+    // Primary Button (Today's Card)
     Button(
         onClick = { onNavigateToCard(state.currentDayIndex) },
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(56.dp),
+        enabled = state.missedDaysCount == 0 || state.isTodayCompleted // Force catch up first, unless today is done (which shouldn't happen if they have missed days, since sequential)
     ) {
         Text(
             text = if (state.currentDayIndex == 1 && !state.isTodayCompleted) {
                 "Start your journey"
+            } else if (state.missedDaysCount > 0) {
+                "Catch up to unlock today's card"
+            } else if (!state.isTodayCompleted) {
+                "Start Today's Card"
             } else {
-                "Continue your journey"
+                "Review Today's Card"
             },
             style = MaterialTheme.typography.titleMedium
         )

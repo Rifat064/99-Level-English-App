@@ -20,7 +20,10 @@ sealed interface HomeUiState {
     data class Success(
         val profile: Profile,
         val currentDayIndex: Int,
-        val isTodayCompleted: Boolean
+        val isTodayCompleted: Boolean,
+        val missedDaysCount: Int = 0,
+        val catchUpDayIndex: Int? = null,
+        val missedDaysLost: Int = 0 // Days lost because they fell outside the free window
     ) : HomeUiState
     data class Error(val message: String) : HomeUiState
 }
@@ -55,13 +58,44 @@ class HomeViewModel @Inject constructor(
                 
                 val isTodayCompleted = profile.lastCompletedDay >= currentDayIndex
 
+                // Catch-up logic
+                val totalMissed = maxOf(0, currentDayIndex - profile.lastCompletedDay - 1)
+                val isSubscriber = false // TODO: integrate BillingProvider for P4
+                val freeWindowDays = 7
+                val oldestFreeDay = maxOf(1, currentDayIndex - freeWindowDays + 1)
+                
+                val catchUpDayIndex = if (totalMissed > 0) {
+                    if (isSubscriber) {
+                        profile.lastCompletedDay + 1
+                    } else {
+                        maxOf(profile.lastCompletedDay + 1, oldestFreeDay)
+                    }
+                } else {
+                    null
+                }
+                
+                val missedDaysLost = if (!isSubscriber && totalMissed > 0) {
+                    maxOf(0, oldestFreeDay - (profile.lastCompletedDay + 1))
+                } else {
+                    0
+                }
+                
+                val catchUpDaysAvailable = if (catchUpDayIndex != null) {
+                    currentDayIndex - catchUpDayIndex
+                } else {
+                    0
+                }
+
                 // Schedule or update daily notification based on profile setting
                 notificationScheduler.scheduleDailyNotification(profile.notifyHour)
 
                 _uiState.value = HomeUiState.Success(
                     profile = profile,
                     currentDayIndex = currentDayIndex,
-                    isTodayCompleted = isTodayCompleted
+                    isTodayCompleted = isTodayCompleted,
+                    missedDaysCount = catchUpDaysAvailable,
+                    catchUpDayIndex = catchUpDayIndex,
+                    missedDaysLost = missedDaysLost
                 )
             }.onFailure { exception ->
                 _uiState.value = HomeUiState.Error(exception.message ?: "Failed to load profile")
