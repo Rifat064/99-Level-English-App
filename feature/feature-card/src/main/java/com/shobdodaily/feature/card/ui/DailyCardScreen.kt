@@ -35,13 +35,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import com.shobdodaily.feature.card.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,6 @@ import com.shobdodaily.core.model.DailyCardPayload
 import com.shobdodaily.core.model.UserProgress
 import com.shobdodaily.core.model.Word
 import com.shobdodaily.core.ui.theme.ShobdoDailyTheme
-import com.shobdodaily.feature.card.R
 import java.util.Locale
 
 @Composable
@@ -95,7 +95,7 @@ fun DailyCardScreen(
 
     if (uiState.isLoading) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Loading...")
+            Text(stringResource(R.string.loading))
         }
         return
     }
@@ -103,7 +103,7 @@ fun DailyCardScreen(
     val payload = uiState.payload
     if (payload == null) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(uiState.error ?: "Failed to load card")
+            Text(uiState.error ?: stringResource(R.string.failed_to_load_card))
         }
         return
     }
@@ -114,6 +114,7 @@ fun DailyCardScreen(
     val graphicsLayer = rememberGraphicsLayer()
     val coroutineScope = rememberCoroutineScope()
     val textMeasurer = rememberTextMeasurer()
+    val freeVersionText = stringResource(R.string.free_version_watermark)
 
     Column(
         modifier = modifier
@@ -125,7 +126,7 @@ fun DailyCardScreen(
                     this@drawWithContent.drawContent()
                     if (!uiState.isSubscriber) {
                         val textLayoutResult = textMeasurer.measure(
-                            text = "ShobdoDaily (Free Version)",
+                            text = freeVersionText,
                             style = TextStyle(fontSize = 14.sp, color = Color.White.copy(alpha = 0.7f), fontWeight = FontWeight.Bold)
                         )
                         drawText(
@@ -152,7 +153,7 @@ fun DailyCardScreen(
         ) {
             AsyncImage(
                 model = payload.card.imagePath,
-                contentDescription = "Daily Card Image",
+                contentDescription = stringResource(R.string.daily_card_image_desc),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
                 placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
@@ -206,7 +207,7 @@ fun DailyCardScreen(
                                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                     }
                                     
-                                    context.startActivity(Intent.createChooser(shareIntent, "Share your Daily Card"))
+                                    context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_card_chooser)))
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()
@@ -216,7 +217,7 @@ fun DailyCardScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Share,
-                        contentDescription = "Share",
+                        contentDescription = stringResource(R.string.share_desc),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -226,7 +227,7 @@ fun DailyCardScreen(
                 ) {
                     Icon(
                         imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark",
+                        contentDescription = if (isBookmarked) stringResource(R.string.remove_bookmark_desc) else stringResource(R.string.add_bookmark_desc),
                         tint = if (isBookmarked) Color.Red else MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -258,7 +259,7 @@ fun DailyCardScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Play English pronunciation",
+                    contentDescription = stringResource(R.string.play_english_desc),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

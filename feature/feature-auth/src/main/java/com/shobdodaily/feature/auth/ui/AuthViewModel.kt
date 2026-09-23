@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.shobdodaily.core.model.AnalyticsTracker
 import com.shobdodaily.core.model.repository.ProfileRepository
 import com.shobdodaily.feature.auth.BuildConfig
 import com.shobdodaily.feature.auth.domain.AuthRepository
@@ -32,7 +33,8 @@ sealed interface AuthUiState {
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
@@ -42,7 +44,10 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.sessionStatus.collectLatest { status ->
                 when (status) {
-                    is SessionStatus.Authenticated -> _uiState.value = AuthUiState.Success
+                    is SessionStatus.Authenticated -> {
+                        _uiState.value = AuthUiState.Success
+                        analyticsTracker.setUserId(authRepository.currentUserId)
+                    }
                     is SessionStatus.NotAuthenticated -> {
                         if (_uiState.value !is AuthUiState.Error) {
                             _uiState.value = AuthUiState.Idle

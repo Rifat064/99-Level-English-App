@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.shobdodaily.feature.quiz.R
 
 @Composable
 fun QuizRoute(
@@ -42,7 +44,7 @@ fun QuizScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Weekly Quiz") },
+                title = { Text(stringResource(R.string.weekly_quiz)) },
                 // Notice there is no back button on the Quiz itself to prevent back-editing!
                 // But we can allow exiting the quiz entirely (though not navigating to previous questions).
             )
@@ -56,7 +58,7 @@ fun QuizScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text(if (uiState.currentQuestionIndex == uiState.totalQuestions - 1) "Finish Quiz" else "Next")
+                    Text(if (uiState.currentQuestionIndex == uiState.totalQuestions - 1) stringResource(R.string.finish_quiz) else stringResource(R.string.next_question))
                 }
             } else if (uiState is QuizUiState.Finished) {
                 Button(
@@ -65,7 +67,7 @@ fun QuizScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text("Return Home")
+                    Text(stringResource(R.string.return_home))
                 }
             }
         }

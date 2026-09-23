@@ -40,7 +40,7 @@ def main():
         image_name = f"card_{i+1:03d}.webp"
         image_path = os.path.join(image_dir, image_name)
         
-        storage_key = f"season1/{image_name}"
+        storage_key = f"season2/{image_name}"
 
         # 1. Upload to storage
         if args.mock:
@@ -57,8 +57,8 @@ def main():
         # Note: We need word_a_id and word_b_id which are foreign keys. 
         # For the mock, we'll just assume they exist or we'll bypass the strict FK check in the mock log.
         card_data = {
-            'day_index': i + 1,
-            'season': 1,
+            'day_index': 90 + i + 1,
+            'season': 2,
             'sentence_en': row['sentence_en'],
             'sentence_bn': row['sentence_bn'],
             'image_path': storage_key,

@@ -3,8 +3,10 @@ package com.shobdodaily.feature.history.review
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.shobdodaily.feature.history.R
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,7 +38,7 @@ fun ReviewDeckScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Review Deck") },
+                title = { Text(stringResource(R.string.review_deck)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Text("←") // Or Icon
@@ -68,10 +70,10 @@ fun ReviewDeckScreen(
                         modifier = Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("All done for today!", style = MaterialTheme.typography.headlineMedium)
+                        Text(stringResource(R.string.all_done_for_today), style = MaterialTheme.typography.headlineMedium)
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = onNavigateBack) {
-                            Text("Go Back")
+                            Text(stringResource(R.string.go_back))
                         }
                     }
                 }
@@ -82,7 +84,7 @@ fun ReviewDeckScreen(
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Cards remaining: ${uiState.remainingCount}")
+                        Text(stringResource(R.string.cards_remaining, uiState.remainingCount))
                         Spacer(modifier = Modifier.height(16.dp))
                         
                         // Card Display
@@ -100,7 +102,7 @@ fun ReviewDeckScreen(
                                 onClick = { showAnswer = true },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Show Answer")
+                                Text(stringResource(R.string.show_answer))
                             }
                         } else {
                             Row(
@@ -114,7 +116,7 @@ fun ReviewDeckScreen(
                                     },
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                                 ) {
-                                    Text("Hard (1d)")
+                                    Text(stringResource(R.string.hard_1d))
                                 }
                                 
                                 Button(
@@ -124,7 +126,7 @@ fun ReviewDeckScreen(
                                     },
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                                 ) {
-                                    Text("Good (3d)")
+                                    Text(stringResource(R.string.good_3d))
                                 }
                                 
                                 Button(
@@ -134,7 +136,7 @@ fun ReviewDeckScreen(
                                     },
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                                 ) {
-                                    Text("Easy (7d)")
+                                    Text(stringResource(R.string.easy_7d))
                                 }
                             }
                         }

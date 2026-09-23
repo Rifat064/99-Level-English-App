@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import com.shobdodaily.feature.home.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -97,9 +99,9 @@ fun OnboardingScreen(
                 }
             ) {
                 if (pagerState.currentPage < 2) {
-                    Text("Next")
+                    Text(stringResource(R.string.next_step))
                 } else {
-                    Text("Complete")
+                    Text(stringResource(R.string.complete_step))
                 }
             }
         }

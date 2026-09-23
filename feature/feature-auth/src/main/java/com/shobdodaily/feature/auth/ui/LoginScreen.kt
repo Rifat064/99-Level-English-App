@@ -21,8 +21,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.Modifier
+import com.shobdodaily.feature.auth.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -67,7 +69,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Welcome to Shobdo Daily",
+                text = stringResource(R.string.welcome_shobdo_daily),
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center
             )
@@ -75,7 +77,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Master your vocabulary for BCS, Bank, and IELTS exams.",
+                text = stringResource(R.string.master_vocabulary),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -90,7 +92,7 @@ fun LoginScreen(
                     onClick = { viewModel.signInWithGoogle(context) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Sign in with Google")
+                    Text(stringResource(R.string.sign_in_with_google))
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -99,7 +101,7 @@ fun LoginScreen(
                     onClick = { onGuestContinue() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Continue as Guest")
+                    Text(stringResource(R.string.continue_as_guest))
                 }
             }
 

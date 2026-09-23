@@ -1,0 +1,15 @@
+<resources>
+    <string name="history">History</string>
+    <string name="loading">Loading...</string>
+    <string name="review_deck">Review Deck</string>
+    <string name="all_done_for_today">All done for today!</string>
+    <string name="go_back">Go Back</string>
+    <string name="cards_remaining">Cards remaining: %1$d</string>
+    <string name="show_answer">Show Answer</string>
+    <string name="hard_1d">Hard (1d)</string>
+    <string name="good_3d">Good (3d)</string>
+    <string name="easy_7d">Easy (7d)</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="search_words">Search words...</string>
+    <string name="filter_all">All</string>
+</resources>

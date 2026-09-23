@@ -14,7 +14,9 @@ def main():
     with open(input_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for i, row in enumerate(reader):
-            if i >= 180:
+            if i < 180:
+                continue
+            if i >= 360:
                 break
             
             # The file has Rank, Verb

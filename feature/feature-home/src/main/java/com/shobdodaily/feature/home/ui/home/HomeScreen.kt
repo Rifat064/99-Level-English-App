@@ -28,8 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.shobdodaily.feature.home.R
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun HomeScreen(
@@ -60,7 +62,7 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { viewModel.loadProfile() }) {
-                    Text("Retry")
+                    Text(stringResource(R.string.retry))
                 }
                 Spacer(modifier = Modifier.weight(1f))
             }
@@ -81,7 +83,7 @@ private fun HomeContent(
 ) {
     // Greeting
     Text(
-        text = "Hello, ${state.profile.displayName ?: "Learner"}!",
+        text = stringResource(R.string.hello_name, state.profile.displayName ?: stringResource(R.string.learner)),
         style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.fillMaxWidth()
@@ -108,7 +110,7 @@ private fun HomeContent(
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = "Current Streak",
+                    text = stringResource(R.string.current_streak),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -120,7 +122,7 @@ private fun HomeContent(
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = "Longest Streak",
+                    text = stringResource(R.string.longest_streak),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -140,7 +142,7 @@ private fun HomeContent(
                     Icon(Icons.Default.Warning, contentDescription = "Missed", tint = MaterialTheme.colorScheme.error)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "You are ${state.missedDaysCount} days behind",
+                        text = stringResource(R.string.days_behind, state.missedDaysCount),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -148,7 +150,7 @@ private fun HomeContent(
                 if (state.missedDaysLost > 0) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "(${state.missedDaysLost} older days are locked in the premium archive)",
+                        text = stringResource(R.string.locked_in_premium, state.missedDaysLost),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onErrorContainer
                     )
@@ -159,7 +161,7 @@ private fun HomeContent(
                     modifier = Modifier.fillMaxWidth(),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("Catch Up Now")
+                    Text(stringResource(R.string.catch_up_now))
                 }
             }
         }
@@ -178,7 +180,7 @@ private fun HomeContent(
                 tint = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = " You've completed today's card!",
+                text = stringResource(R.string.today_completed),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -189,7 +191,7 @@ private fun HomeContent(
                 tint = if (state.missedDaysCount > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error
             )
             Text(
-                text = " Today's card is waiting for you.",
+                text = stringResource(R.string.today_waiting),
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (state.missedDaysCount > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error
             )
@@ -207,13 +209,13 @@ private fun HomeContent(
     ) {
         Text(
             text = if (state.currentDayIndex == 1 && !state.isTodayCompleted) {
-                "Start your journey"
+                stringResource(R.string.start_journey)
             } else if (state.missedDaysCount > 0) {
-                "Catch up to unlock today's card"
+                stringResource(R.string.catch_up_unlock)
             } else if (!state.isTodayCompleted) {
-                "Start Today's Card"
+                stringResource(R.string.start_today_card)
             } else {
-                "Review Today's Card"
+                stringResource(R.string.review_today_card)
             },
             style = MaterialTheme.typography.titleMedium
         )
@@ -222,13 +224,13 @@ private fun HomeContent(
 
     // Value Pitch Sections
     ValuePitchCard(
-        title = "One Card a Day",
-        description = "Learn 2 words effectively every day. Consistency beats intensity."
+        title = stringResource(R.string.one_card_a_day),
+        description = stringResource(R.string.one_card_desc)
     )
     Spacer(modifier = Modifier.height(16.dp))
     ValuePitchCard(
-        title = "Exam Ready",
-        description = "Words curated for BCS, Bank, IELTS and BBA exams to give you the edge."
+        title = stringResource(R.string.exam_ready),
+        description = stringResource(R.string.exam_ready_desc)
     )
 }
 

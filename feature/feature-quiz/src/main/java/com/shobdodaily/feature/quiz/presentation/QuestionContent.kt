@@ -9,10 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import com.shobdodaily.feature.quiz.domain.Question
+import com.shobdodaily.feature.quiz.R
 
 @Composable
 fun QuestionContent(
@@ -30,8 +32,8 @@ fun QuestionContent(
             is Question.EnglishToBangla -> question.targetWord.word
             is Question.BanglaToEnglish -> question.targetWord.bangla
             is Question.FillInTheBlank -> question.sentenceWithBlank
-            is Question.SentenceRecall -> "What's happening in this picture?"
-            is Question.OddOneOut -> "Which one doesn't belong?"
+            is Question.SentenceRecall -> stringResource(R.string.whats_happening_picture)
+            is Question.OddOneOut -> stringResource(R.string.which_one_doesnt_belong)
         }
 
         Spacer(modifier = Modifier.height(32.dp))

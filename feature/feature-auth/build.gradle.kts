@@ -21,7 +21,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID", "PLACEHOLDER_CLIENT_ID")

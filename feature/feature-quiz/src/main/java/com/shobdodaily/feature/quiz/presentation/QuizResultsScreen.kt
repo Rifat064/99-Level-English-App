@@ -11,7 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import com.shobdodaily.core.model.Word
+import com.shobdodaily.feature.quiz.R
 
 @Composable
 fun QuizResultsScreen(
@@ -27,7 +29,7 @@ fun QuizResultsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Quiz Complete!",
+            text = stringResource(R.string.quiz_complete),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
@@ -43,13 +45,13 @@ fun QuizResultsScreen(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "$score / $totalQuestions",
+                    text = stringResource(R.string.score_format, score, totalQuestions),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Score",
+                    text = stringResource(R.string.score_label),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -60,7 +62,7 @@ fun QuizResultsScreen(
         
         if (missedWords.isNotEmpty()) {
             Text(
-                text = "Review Missed Words",
+                text = stringResource(R.string.review_missed_words),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.align(Alignment.Start)
             )
@@ -97,7 +99,7 @@ fun QuizResultsScreen(
             }
         } else {
             Text(
-                text = "Perfect Score! Great job!",
+                text = stringResource(R.string.perfect_score),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.tertiary
             )

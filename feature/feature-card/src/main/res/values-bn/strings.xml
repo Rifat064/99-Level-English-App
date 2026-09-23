@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vocabulary_to_focus">আজকের শব্দ</string>
-    <string name="whats_happening">কী ঘটছে</string>
-    <string name="mark_as_learned">শেখা হয়েছে</string>
+    <string name="vocabulary_to_focus">Vocabulary to focus</string>
+    <string name="whats_happening">What\'s happening</string>
+    <string name="mark_as_learned">Mark as learned</string>
+    <string name="loading">Loading...</string>
+    <string name="failed_to_load_card">Failed to load card</string>
+    <string name="free_version_watermark">ShobdoDaily (Free Version)</string>
+    <string name="daily_card_image_desc">Daily Card Image</string>
+    <string name="share_card_chooser">Share your Daily Card</string>
+    <string name="share_desc">Share</string>
+    <string name="remove_bookmark_desc">Remove Bookmark</string>
+    <string name="add_bookmark_desc">Add Bookmark</string>
+    <string name="play_english_desc">Play English pronunciation</string>
 </resources>

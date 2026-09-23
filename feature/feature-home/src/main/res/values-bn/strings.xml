@@ -1,0 +1,22 @@
+<resources>
+    <string name="retry">Retry</string>
+    <string name="hello_name">Hello, %1$s!</string>
+    <string name="learner">Learner</string>
+    <string name="current_streak">Current Streak</string>
+    <string name="longest_streak">Longest Streak</string>
+    <string name="days_behind">You are %1$d days behind</string>
+    <string name="locked_in_premium">(%1$d older days are locked in the premium archive)</string>
+    <string name="catch_up_now">Catch Up Now</string>
+    <string name="today_completed"> You\'ve completed today\'s card!</string>
+    <string name="today_waiting"> Today\'s card is waiting for you.</string>
+    <string name="start_journey">Start your journey</string>
+    <string name="catch_up_unlock">Catch up to unlock today\'s card</string>
+    <string name="start_today_card">Start Today\'s Card</string>
+    <string name="review_today_card">Review Today\'s Card</string>
+    <string name="one_card_a_day">One Card a Day</string>
+    <string name="one_card_desc">Learn 2 words effectively every day. Consistency beats intensity.</string>
+    <string name="exam_ready">Exam Ready</string>
+    <string name="exam_ready_desc">Words curated for BCS, Bank, IELTS and BBA exams to give you the edge.</string>
+    <string name="next_step">Next</string>
+    <string name="complete_step">Complete</string>
+</resources>

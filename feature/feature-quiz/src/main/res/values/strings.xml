@@ -1,0 +1,13 @@
+<resources>
+    <string name="weekly_quiz">Weekly Quiz</string>
+    <string name="finish_quiz">Finish Quiz</string>
+    <string name="next_question">Next</string>
+    <string name="return_home">Return Home</string>
+    <string name="quiz_complete">Quiz Complete!</string>
+    <string name="score_format">%1$d / %2$d</string>
+    <string name="score_label">Score</string>
+    <string name="review_missed_words">Review Missed Words</string>
+    <string name="perfect_score">Perfect Score! Great job!</string>
+    <string name="whats_happening_picture">What\'s happening in this picture?</string>
+    <string name="which_one_doesnt_belong">Which one doesn\'t belong?</string>
+</resources>

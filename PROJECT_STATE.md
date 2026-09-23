@@ -10,8 +10,8 @@ session starts with stale information here, the agent will repeat or skip work.
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 7 — Release |
-| Current step | 7.5 (next: Localization) |
+| Current phase | Phase 7 — Release (Complete) |
+| Current step | All steps completed |
 | Last updated | 2026-09-23 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -95,8 +95,8 @@ Never delete history from the session log or decision log. Append only.
 - [x] 7.2 R8 rules
 - [x] 7.3 Play compliance
 - [x] 7.4 Accessibility
-- [ ] 7.5 Localization
-- [ ] 7.6 Season 2 content
+- [x] 7.5 Localization
+- [x] 7.6 Season 2 content
 
 ---
 
@@ -200,3 +200,5 @@ Append one row per completed step.
 | 2026-09-23 | 7.2 | Added ProGuard rules for kotlinx.serialization, Ktor, and Supabase models. Set isMinifyEnabled = true for release builds. | assembleRelease passed without serialization errors. |
 | 2026-09-23 | 7.3 | Created privacy policy, account deletion page, and Data Safety form guide in `docs/` for Play Console compliance. | Deferred pre-launch report verification to owner. |
 | 2026-09-23 | 7.4 | Audited for 200% font scale and TalkBack. Replaced hardcoded height on Home button with defaultMinSize. Added proper TalkBack labels for Bookmark, TTS, and Image. | assembleDebug passed. |
+| 2026-09-23 | 7.5 | Extracted strings for `feature-home`, `feature-quiz`, `feature-history`, `feature-auth`, `feature-card`. Added Bangla strings (default placeholders). Verified via compileDebug. | assembleDebug passed. |
+| 2026-09-23 | 7.6 | Updated `pipeline/01_curate.py` to pick words 181-360 and `pipeline/08_upload.py` to target season 2 and day indexes 91-180. Ran the mock content pipeline. | 90 cards correctly mocked and uploaded for season 2. |
