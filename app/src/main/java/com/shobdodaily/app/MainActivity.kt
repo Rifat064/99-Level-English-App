@@ -33,12 +33,13 @@ class MainActivity : ComponentActivity() {
                 "Light" -> false
                 else -> isSystemInDarkTheme()
             }
+            val isEasterEggUnlocked by settingsRepository.isEasterEggUnlocked.collectAsState(initial = false)
             ShobdoDailyTheme(darkTheme = darkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    AppNavGraph()
+                    AppNavGraph(isEasterEggUnlocked = isEasterEggUnlocked)
                 }
             }
         }

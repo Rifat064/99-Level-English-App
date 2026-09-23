@@ -27,12 +27,21 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import android.widget.Toast
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -61,6 +70,10 @@ fun SettingsScreen(
         onSurfaceVariant = Color(0xFF4A4A4A),
         error = Color(0xFFD32F2F)
     )
+
+    val context = LocalContext.current
+    var clickCount by remember { mutableIntStateOf(0) }
+    var lastClickTime by remember { mutableLongStateOf(0L) }
 
     MaterialTheme(colorScheme = settingsColors) {
     Scaffold(
@@ -203,6 +216,34 @@ fun SettingsScreen(
             ) {
                 Text("Test Crash (Dev Only)")
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Easter Egg Trigger
+            Text(
+                text = "Colonel SS Hans Lamda",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.Transparent, // Very subtle, hidden unless highlighted or clicked blindly
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val currentTime = System.currentTimeMillis()
+                        if (currentTime - lastClickTime > 2000) {
+                            clickCount = 1
+                        } else {
+                            clickCount++
+                        }
+                        lastClickTime = currentTime
+
+                        if (clickCount >= 7) {
+                            clickCount = 0
+                            viewModel.unlockEasterEgg()
+                            Toast.makeText(context, "Easter Egg Unlocked!", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    .padding(16.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
     }
     }

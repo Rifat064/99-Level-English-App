@@ -51,7 +51,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    isEasterEggUnlocked: Boolean = false
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -146,18 +147,28 @@ fun AppNavGraph(
         }
 
         composable<Login> {
-            LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Splash) {
-                        popUpTo(Login) { inclusive = true }
+            if (isEasterEggUnlocked) {
+                com.shobdodaily.feature.auth.ui.EasterEggLoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(Splash) {
+                            popUpTo(Login) { inclusive = true }
+                        }
                     }
-                },
-                onGuestContinue = {
-                    navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
-                        popUpTo(Login) { inclusive = true }
+                )
+            } else {
+                LoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(Splash) {
+                            popUpTo(Login) { inclusive = true }
+                        }
+                    },
+                    onGuestContinue = {
+                        navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                            popUpTo(Login) { inclusive = true }
+                        }
                     }
-                }
-            )
+                )
+            }
         }
 
         composable<com.shobdodaily.core.ui.navigation.Onboarding> {
@@ -171,11 +182,26 @@ fun AppNavGraph(
         }
 
         composable<Home> {
-            HomeScreen(
-                onNavigateToCard = { dayIndex ->
-                    navController.navigate(DailyCard(dayIndex))
+            if (isEasterEggUnlocked) {
+                var showOmnitrix by remember { mutableStateOf(false) }
+                if (showOmnitrix) {
+                    com.shobdodaily.feature.home.ui.home.OmnitrixHomeScreen(
+                        onNavigateToCard = { navController.navigate(DailyCard(0)) },
+                        onNavigateToQuiz = { navController.navigate(Quiz) },
+                        onNavigateToSettings = { navController.navigate(Settings) }
+                    )
+                } else {
+                    com.shobdodaily.feature.home.ui.home.WhoAreYouScreen(
+                        onContinue = { showOmnitrix = true }
+                    )
                 }
-            )
+            } else {
+                HomeScreen(
+                    onNavigateToCard = { dayIndex ->
+                        navController.navigate(DailyCard(dayIndex))
+                    }
+                )
+            }
         }
 
         composable<DailyCard>(
@@ -189,11 +215,22 @@ fun AppNavGraph(
         }
 
         composable<Quiz> {
-            com.shobdodaily.feature.quiz.presentation.QuizRoute(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
+            if (isEasterEggUnlocked) {
+                val viewModel = hiltViewModel<com.shobdodaily.feature.quiz.presentation.QuizViewModel>()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                com.shobdodaily.feature.quiz.presentation.Ben10QuizScreen(
+                    uiState = uiState,
+                    onOptionSelected = viewModel::selectOption,
+                    onSubmitAnswer = viewModel::submitAnswer,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            } else {
+                com.shobdodaily.feature.quiz.presentation.QuizRoute(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable<History> {
@@ -211,14 +248,16 @@ fun AppNavGraph(
         }
 
         composable<Settings> {
-            SettingsScreen(
-                onNavigateBack = { navController.popBackStack() },
-                onSignOut = {
-                    navController.navigate(Splash) {
-                        popUpTo(0) { inclusive = true }
-                    }
+            val context = androidx.compose.ui.platform.LocalContext.current
+            LaunchedEffect(Unit) {
+                context.startActivity(
+                    io.flutter.embedding.android.FlutterActivity.createDefaultIntent(context)
+                )
+                // Pop back to home so when Flutter closes, we aren't stuck in a loop
+                navController.navigate(Home) {
+                    popUpTo(Home) { inclusive = true }
                 }
-            )
+            }
         }
 
         composable<Paywall> {

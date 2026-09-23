@@ -12,7 +12,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
@@ -38,3 +38,5 @@ include(":feature:feature-card")
 include(":feature:feature-history")
 include(":feature:feature-quiz")
 include(":feature:feature-paywall")
+
+apply(from = "flutter_module/.android/include_flutter.groovy")

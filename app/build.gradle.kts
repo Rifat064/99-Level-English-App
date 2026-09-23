@@ -76,6 +76,9 @@ dependencies {
     implementation(project(":feature:feature-quiz"))
     implementation(project(":feature:feature-paywall"))
 
+    // Flutter Module
+    implementation(project(":flutter"))
+
     // Compose & AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

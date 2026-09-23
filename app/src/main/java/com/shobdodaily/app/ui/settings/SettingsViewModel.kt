@@ -111,4 +111,10 @@ class SettingsViewModel @Inject constructor(
             authRepository.deleteAccount()
         }
     }
+
+    fun unlockEasterEgg() {
+        viewModelScope.launch {
+            settingsRepository.setEasterEggUnlocked(true)
+        }
+    }
 }

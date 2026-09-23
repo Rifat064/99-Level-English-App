@@ -9,6 +9,8 @@ interface SettingsRepository {
     val ttsAccent: Flow<String>
     
     val guestName: Flow<String?>
+    val isEasterEggUnlocked: Flow<Boolean>
+
     val guestLoginTimestamp: Flow<Long?>
     
     suspend fun completeOnboarding()
@@ -17,4 +19,5 @@ interface SettingsRepository {
     suspend fun setTtsAccent(accent: String)
     suspend fun setGuestSession(name: String, timestamp: Long)
     suspend fun clearGuestSession()
+    suspend fun setEasterEggUnlocked(unlocked: Boolean)
 }
