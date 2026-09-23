@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "607310167838",
+    "project_id": "shobdodaily",
+    "storage_bucket": "shobdodaily.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607310167838:android:dd0ebfa15c77ace447130f",
+        "android_client_info": {
+          "package_name": "com.shobdodaily.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw_qJpClhcnobSWkxUgn0KY3TiLCdW8Hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

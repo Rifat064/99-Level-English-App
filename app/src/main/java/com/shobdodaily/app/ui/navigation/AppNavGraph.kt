@@ -26,10 +26,14 @@ import com.shobdodaily.feature.history.dictionary.DictionaryScreen
 import com.shobdodaily.feature.home.ui.home.HomeScreen
 import com.shobdodaily.feature.home.ui.onboarding.OnboardingScreen
 import com.shobdodaily.app.ui.settings.SettingsScreen
+import com.shobdodaily.app.ui.splash.SplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @Composable
 fun AppNavGraph(
@@ -44,29 +48,36 @@ fun AppNavGraph(
         composable<Splash> {
             val splashViewModel = hiltViewModel<SplashViewModel>()
             val uiState by splashViewModel.uiState.collectAsStateWithLifecycle()
+            var isSplashAnimationFinished by remember { mutableStateOf(false) }
 
-            LaunchedEffect(uiState) {
-                when (uiState) {
-                    is SplashUiState.GoToLogin -> {
-                        navController.navigate(Login) {
-                            popUpTo(Splash) { inclusive = true }
+            LaunchedEffect(uiState, isSplashAnimationFinished) {
+                if (isSplashAnimationFinished) {
+                    when (uiState) {
+                        is SplashUiState.GoToLogin -> {
+                            navController.navigate(Login) {
+                                popUpTo(Splash) { inclusive = true }
+                            }
                         }
-                    }
-                    is SplashUiState.GoToOnboarding -> {
-                        navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
-                            popUpTo(Splash) { inclusive = true }
+                        is SplashUiState.GoToOnboarding -> {
+                            navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                                popUpTo(Splash) { inclusive = true }
+                            }
                         }
-                    }
-                    is SplashUiState.GoToHome -> {
-                        navController.navigate(Home) {
-                            popUpTo(Splash) { inclusive = true }
+                        is SplashUiState.GoToHome -> {
+                            navController.navigate(Home) {
+                                popUpTo(Splash) { inclusive = true }
+                            }
                         }
+                        else -> {}
                     }
-                    else -> {}
                 }
             }
 
-            PlaceholderScreen("Splash")
+            SplashScreen(
+                onSplashFinished = {
+                    isSplashAnimationFinished = true
+                }
+            )
         }
 
         composable<Login> {

@@ -15,7 +15,7 @@ import com.shobdodaily.core.model.repository.ProfileRepository
 import com.shobdodaily.feature.auth.BuildConfig
 import com.shobdodaily.feature.auth.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jan.supabase.auth.status.SessionStatus
+import com.shobdodaily.feature.auth.domain.AuthSessionStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,16 +44,16 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.sessionStatus.collectLatest { status ->
                 when (status) {
-                    is SessionStatus.Authenticated -> {
+                    AuthSessionStatus.Authenticated -> {
                         _uiState.value = AuthUiState.Success
                         analyticsTracker.setUserId(authRepository.currentUserId)
                     }
-                    is SessionStatus.NotAuthenticated -> {
+                    AuthSessionStatus.NotAuthenticated -> {
                         if (_uiState.value !is AuthUiState.Error) {
                             _uiState.value = AuthUiState.Idle
                         }
                     }
-                    else -> {} // Ignore Initializing or RefreshFailure here, let splash screen handle it if needed
+                    else -> {} // Ignore Loading here, let splash screen handle it if needed
                 }
             }
         }
@@ -67,7 +67,7 @@ class AuthViewModel @Inject constructor(
                 val credentialManager = CredentialManager.create(context)
                 val googleIdOption = GetGoogleIdOption.Builder()
                     .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
+                    .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
                     .build()
 
                 val request = GetCredentialRequest.Builder()
@@ -81,8 +81,8 @@ class AuthViewModel @Inject constructor(
                     val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                     val idToken = googleIdTokenCredential.idToken
                     
-                    val supabaseResult = authRepository.signInWithGoogle(idToken)
-                    if (supabaseResult.isSuccess) {
+                    val authResult = authRepository.signInWithGoogle(idToken)
+                    if (authResult.isSuccess) {
                         val userId = authRepository.currentUserId
                         if (userId != null) {
                             profileRepository.createProfileIfNotExist(userId, googleIdTokenCredential.displayName)
@@ -90,7 +90,7 @@ class AuthViewModel @Inject constructor(
                         _uiState.value = AuthUiState.Success
                     } else {
                         _uiState.value = AuthUiState.Error(
-                            supabaseResult.exceptionOrNull()?.message ?: "Supabase auth failed"
+                            authResult.exceptionOrNull()?.message ?: "Auth failed"
                         )
                     }
                 } else {

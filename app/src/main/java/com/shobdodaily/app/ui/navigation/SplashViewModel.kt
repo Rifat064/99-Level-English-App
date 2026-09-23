@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.shobdodaily.core.datastore.SettingsRepository
 import com.shobdodaily.feature.auth.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jan.supabase.auth.status.SessionStatus
+import com.shobdodaily.feature.auth.domain.AuthSessionStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -30,14 +30,14 @@ class SplashViewModel @Inject constructor(
         settingsRepository.isOnboardingCompleted
     ) { sessionStatus, isOnboardingCompleted ->
         when (sessionStatus) {
-            is SessionStatus.Authenticated -> {
+            AuthSessionStatus.Authenticated -> {
                 if (isOnboardingCompleted) {
                     SplashUiState.GoToHome
                 } else {
                     SplashUiState.GoToOnboarding
                 }
             }
-            is SessionStatus.NotAuthenticated -> SplashUiState.GoToLogin
+            AuthSessionStatus.NotAuthenticated -> SplashUiState.GoToLogin
             else -> SplashUiState.Loading // Initializing or RefreshFailure (could retry, but keep loading until resolved)
         }
     }.stateIn(

@@ -24,8 +24,8 @@ android {
         minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID", "PLACEHOLDER_CLIENT_ID")
-        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
+        val googleClientId = localProperties.getProperty("GOOGLE_WEB_CLIENT_ID", "PLACEHOLDER_CLIENT_ID")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleClientId\"")
     }
 
     compileOptions {
@@ -59,6 +59,10 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services)
     implementation(libs.google.identity.googleid)
+    
+    // Firebase Auth
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 
     // Hilt DI
     implementation(libs.hilt.android)

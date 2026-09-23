@@ -1,10 +1,15 @@
 package com.shobdodaily.feature.auth.domain
 
-import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.StateFlow
 
+enum class AuthSessionStatus {
+    Loading,
+    Authenticated,
+    NotAuthenticated
+}
+
 interface AuthRepository {
-    val sessionStatus: StateFlow<SessionStatus>
+    val sessionStatus: StateFlow<AuthSessionStatus>
     val currentUserId: String?
     
     suspend fun signInWithGoogle(idToken: String): Result<Unit>

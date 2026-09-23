@@ -9,7 +9,12 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.functions.functions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
+import com.shobdodaily.feature.auth.domain.AuthSessionStatus
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +23,19 @@ class SupabaseAuthRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) : AuthRepository {
 
-    override val sessionStatus: StateFlow<SessionStatus> = supabaseClient.auth.sessionStatus
+    override val sessionStatus: StateFlow<AuthSessionStatus> = supabaseClient.auth.sessionStatus
+        .map { status ->
+            when (status) {
+                is SessionStatus.Authenticated -> AuthSessionStatus.Authenticated
+                is SessionStatus.NotAuthenticated -> AuthSessionStatus.NotAuthenticated
+                else -> AuthSessionStatus.Loading
+            }
+        }
+        .stateIn(
+            scope = CoroutineScope(Dispatchers.IO),
+            started = SharingStarted.Eagerly,
+            initialValue = AuthSessionStatus.Loading
+        )
 
     override val currentUserId: String?
         get() = supabaseClient.auth.currentUserOrNull()?.id
