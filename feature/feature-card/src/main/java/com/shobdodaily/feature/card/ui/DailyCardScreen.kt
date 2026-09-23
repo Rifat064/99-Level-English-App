@@ -152,7 +152,7 @@ fun DailyCardScreen(
         ) {
             AsyncImage(
                 model = payload.card.imagePath,
-                contentDescription = null,
+                contentDescription = "Daily Card Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
                 placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
@@ -226,7 +226,7 @@ fun DailyCardScreen(
                 ) {
                     Icon(
                         imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Bookmark",
+                        contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark",
                         tint = if (isBookmarked) Color.Red else MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -258,7 +258,7 @@ fun DailyCardScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Play TTS",
+                    contentDescription = "Play English pronunciation",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

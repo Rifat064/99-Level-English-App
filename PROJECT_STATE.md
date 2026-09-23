@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 7 — Release |
-| Current step | 7.4 (next: Accessibility) |
+| Current step | 7.5 (next: Localization) |
 | Last updated | 2026-09-23 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -94,7 +94,7 @@ Never delete history from the session log or decision log. Append only.
 - [x] 7.1 Crash reporting + analytics
 - [x] 7.2 R8 rules
 - [x] 7.3 Play compliance
-- [ ] 7.4 Accessibility
+- [x] 7.4 Accessibility
 - [ ] 7.5 Localization
 - [ ] 7.6 Season 2 content
 
@@ -199,3 +199,4 @@ Append one row per completed step.
 | 2026-09-23 | 7.1 | Integrated Sentry crash reporting + Sentry Compose analytics. Added SENTRY_DSN to local.properties. Added test crash button in SettingsScreen. | assembleDebug passed. |
 | 2026-09-23 | 7.2 | Added ProGuard rules for kotlinx.serialization, Ktor, and Supabase models. Set isMinifyEnabled = true for release builds. | assembleRelease passed without serialization errors. |
 | 2026-09-23 | 7.3 | Created privacy policy, account deletion page, and Data Safety form guide in `docs/` for Play Console compliance. | Deferred pre-launch report verification to owner. |
+| 2026-09-23 | 7.4 | Audited for 200% font scale and TalkBack. Replaced hardcoded height on Home button with defaultMinSize. Added proper TalkBack labels for Bookmark, TTS, and Image. | assembleDebug passed. |

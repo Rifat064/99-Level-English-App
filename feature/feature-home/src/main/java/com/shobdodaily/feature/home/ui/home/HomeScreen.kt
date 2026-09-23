@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
@@ -201,7 +202,7 @@ private fun HomeContent(
         onClick = { onNavigateToCard(state.currentDayIndex) },
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .defaultMinSize(minHeight = 56.dp),
         enabled = state.missedDaysCount == 0 || state.isTodayCompleted // Force catch up first, unless today is done (which shouldn't happen if they have missed days, since sequential)
     ) {
         Text(
