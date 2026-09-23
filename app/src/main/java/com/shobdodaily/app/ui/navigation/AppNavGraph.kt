@@ -51,7 +51,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    isEasterEggUnlocked: Boolean = false
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -146,18 +147,33 @@ fun AppNavGraph(
         }
 
         composable<Login> {
-            LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Splash) {
-                        popUpTo(Login) { inclusive = true }
+            if (isEasterEggUnlocked) {
+                com.shobdodaily.feature.auth.ui.EasterEggLoginScreen(
+                    onSignInClick = { 
+                        navController.navigate(Splash) {
+                            popUpTo(Login) { inclusive = true }
+                        }
+                    },
+                    onGuestClick = {
+                        navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                            popUpTo(Login) { inclusive = true }
+                        }
                     }
-                },
-                onGuestContinue = {
-                    navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
-                        popUpTo(Login) { inclusive = true }
+                )
+            } else {
+                LoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(Splash) {
+                            popUpTo(Login) { inclusive = true }
+                        }
+                    },
+                    onGuestContinue = {
+                        navController.navigate(com.shobdodaily.core.ui.navigation.Onboarding) {
+                            popUpTo(Login) { inclusive = true }
+                        }
                     }
-                }
-            )
+                )
+            }
         }
 
         composable<com.shobdodaily.core.ui.navigation.Onboarding> {
@@ -171,11 +187,32 @@ fun AppNavGraph(
         }
 
         composable<Home> {
-            HomeScreen(
-                onNavigateToCard = { dayIndex ->
-                    navController.navigate(DailyCard(dayIndex))
+            if (isEasterEggUnlocked) {
+                var showIntro by remember { mutableStateOf(true) }
+                if (showIntro) {
+                    com.shobdodaily.feature.home.ui.home.WhoAreYouScreen(
+                        onContinue = { showIntro = false }
+                    )
+                } else {
+                    com.shobdodaily.feature.home.ui.home.OmnitrixHomeScreen(
+                        onNavigateToCard = {
+                            navController.navigate(DailyCard(1))
+                        },
+                        onNavigateToProgress = {
+                            navController.navigate(History)
+                        },
+                        onNavigateToSettings = {
+                            navController.navigate(Settings)
+                        }
+                    )
                 }
-            )
+            } else {
+                HomeScreen(
+                    onNavigateToCard = { dayIndex ->
+                        navController.navigate(DailyCard(dayIndex))
+                    }
+                )
+            }
         }
 
         composable<DailyCard>(
@@ -189,11 +226,22 @@ fun AppNavGraph(
         }
 
         composable<Quiz> {
-            com.shobdodaily.feature.quiz.presentation.QuizRoute(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
+            if (isEasterEggUnlocked) {
+                com.shobdodaily.feature.quiz.ui.Ben10QuizScreen(
+                    word = "Ostentatious",
+                    options = listOf("Showy", "Humble", "Quiet", "Simple"),
+                    correctOption = "Showy",
+                    onCorrectAnswer = {},
+                    onWrongAnswer = {},
+                    onNext = { navController.popBackStack() }
+                )
+            } else {
+                com.shobdodaily.feature.quiz.presentation.QuizRoute(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable<History> {

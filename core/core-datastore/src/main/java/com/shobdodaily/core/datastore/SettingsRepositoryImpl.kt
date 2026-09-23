@@ -39,6 +39,10 @@ class SettingsRepositoryImpl @Inject constructor(
         preferences[PreferencesKeys.GUEST_LOGIN_TIMESTAMP]
     }
 
+    override val isEasterEggUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.IS_EASTER_EGG_UNLOCKED] ?: false
+    }
+
     override suspend fun completeOnboarding() {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_ONBOARDING_COMPLETED] = true
@@ -84,5 +88,12 @@ class SettingsRepositoryImpl @Inject constructor(
         val TTS_ACCENT = stringPreferencesKey("tts_accent")
         val GUEST_NAME = stringPreferencesKey("guest_name")
         val GUEST_LOGIN_TIMESTAMP = longPreferencesKey("guest_login_timestamp")
+        val IS_EASTER_EGG_UNLOCKED = booleanPreferencesKey("is_easter_egg_unlocked")
+    }
+
+    override suspend fun setEasterEggUnlocked(unlocked: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_EASTER_EGG_UNLOCKED] = unlocked
+        }
     }
 }

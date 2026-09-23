@@ -111,4 +111,23 @@ class SettingsViewModel @Inject constructor(
             authRepository.deleteAccount()
         }
     }
+
+    private var easterEggCounter = 0
+    private var lastClickTime = 0L
+
+    fun onEasterEggClick() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastClickTime > 1000) {
+            easterEggCounter = 0
+        }
+        lastClickTime = currentTime
+        easterEggCounter++
+
+        if (easterEggCounter >= 7) {
+            easterEggCounter = 0
+            viewModelScope.launch {
+                settingsRepository.setEasterEggUnlocked(true)
+            }
+        }
+    }
 }
