@@ -1,6 +1,7 @@
 package com.shobdodaily.app.ui.navigation
 
 import android.content.Intent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -35,16 +36,79 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.compose.currentBackStackEntryAsState
+
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = Splash,
-        modifier = modifier
-    ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val showBottomBar = currentDestination?.hasRoute(Home::class) == true ||
+            currentDestination?.hasRoute(History::class) == true ||
+            currentDestination?.hasRoute(Settings::class) == true
+
+    Scaffold(
+        modifier = modifier,
+        bottomBar = {
+            if (showBottomBar) {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = currentDestination?.hasRoute(Home::class) == true,
+                        onClick = {
+                            navController.navigate(Home) {
+                                popUpTo(Home) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                        label = { Text("Home") }
+                    )
+                    NavigationBarItem(
+                        selected = currentDestination?.hasRoute(History::class) == true,
+                        onClick = {
+                            navController.navigate(History) {
+                                popUpTo(Home) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Progress") },
+                        label = { Text("Progress") }
+                    )
+                    NavigationBarItem(
+                        selected = currentDestination?.hasRoute(Settings::class) == true,
+                        onClick = {
+                            navController.navigate(Settings) {
+                                popUpTo(Home) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
+                        label = { Text("Settings") }
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Splash,
+            modifier = Modifier.padding(innerPadding).fillMaxSize()
+        ) {
         composable<Splash> {
             val splashViewModel = hiltViewModel<SplashViewModel>()
             val uiState by splashViewModel.uiState.collectAsStateWithLifecycle()
@@ -96,8 +160,8 @@ fun AppNavGraph(
         }
 
         composable<com.shobdodaily.core.ui.navigation.Onboarding> {
-            OnboardingScreen(
-                onOnboardingCompleted = {
+            com.shobdodaily.feature.home.ui.onboarding.WalkthroughScreen(
+                onWalkthroughCompleted = {
                     navController.navigate(Home) {
                         popUpTo(com.shobdodaily.core.ui.navigation.Onboarding) { inclusive = true }
                     }
@@ -174,6 +238,7 @@ fun AppNavGraph(
                     navController.popBackStack()
                 }
             )
+        }
         }
     }
 }

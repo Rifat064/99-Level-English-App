@@ -45,6 +45,24 @@ fun SettingsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    // Custom Settings Theme: Cream + Yellow/Orange + Dark Navy
+    val settingsColors = MaterialTheme.colorScheme.copy(
+        background = Color(0xFFFFF8E1),          // Cream background
+        surface = Color(0xFFFFF3E0),              // Warm cream surface
+        surfaceVariant = Color(0xFFFFECB3),       // Light amber surface variant
+        primary = Color(0xFF1A237E),              // Dark navy primary
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFFFCC80),      // Orange container
+        onPrimaryContainer = Color(0xFF1A237E),    // Navy text on orange
+        secondary = Color(0xFFF57C00),             // Orange accent
+        onSecondary = Color.White,
+        onBackground = Color(0xFF1A237E),          // Navy text on cream
+        onSurface = Color(0xFF1A237E),             // Navy text on surface
+        onSurfaceVariant = Color(0xFF4A4A4A),
+        error = Color(0xFFD32F2F)
+    )
+
+    MaterialTheme(colorScheme = settingsColors) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -186,5 +204,6 @@ fun SettingsScreen(
                 Text("Test Crash (Dev Only)")
             }
         }
+    }
     }
 }

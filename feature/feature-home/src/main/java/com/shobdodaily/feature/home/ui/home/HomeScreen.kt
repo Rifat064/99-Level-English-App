@@ -1,7 +1,6 @@
 package com.shobdodaily.feature.home.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,30 +12,36 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,53 +58,41 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF0F172A),
-                        Color(0xFF1E293B)
-                    )
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            when (val state = uiState) {
-                is HomeUiState.Loading -> {
-                    Spacer(modifier = Modifier.weight(1f))
-                    CircularProgressIndicator(color = Color(0xFF38BDF8))
-                    Spacer(modifier = Modifier.weight(1f))
+        when (val state = uiState) {
+            is HomeUiState.Loading -> {
+                Spacer(modifier = Modifier.weight(1f))
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            is HomeUiState.Error -> {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = state.message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { viewModel.loadProfile() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(stringResource(R.string.retry), color = MaterialTheme.colorScheme.onPrimary)
                 }
-                is HomeUiState.Error -> {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = state.message,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = { viewModel.loadProfile() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF38BDF8))
-                    ) {
-                        Text(stringResource(R.string.retry), color = Color.White)
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-                is HomeUiState.Success -> {
-                    HomeContent(
-                        state = state,
-                        onNavigateToCard = onNavigateToCard
-                    )
-                }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            is HomeUiState.Success -> {
+                HomeContent(
+                    state = state,
+                    onNavigateToCard = onNavigateToCard
+                )
             }
         }
     }
@@ -110,242 +103,208 @@ private fun HomeContent(
     state: HomeUiState.Success,
     onNavigateToCard: (Int) -> Unit
 ) {
-    // Header Section
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
+    // Top Greeting
+    val displayName = state.profile.displayName ?: state.guestName ?: "Learner"
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Welcome back,",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF94A3B8)
-        )
-        Text(
-            text = state.profile.displayName ?: stringResource(R.string.learner),
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-    }
-
-    // Streak Widget
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.05f)
-        )
-    ) {
-        Row(
+        Column {
+            Text(
+                text = "Welcome back,",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = displayName,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+        // Avatar placeholder
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(Color(0xFF38BDF8).copy(alpha = 0.2f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("🔥", fontSize = 24.sp)
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "${state.profile.streakCount}",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(R.string.current_streak),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF94A3B8)
-                )
-            }
-            
-            Box(modifier = Modifier.width(1.dp).height(60.dp).background(Color.White.copy(alpha = 0.1f)))
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(Color(0xFFF59E0B).copy(alpha = 0.2f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("👑", fontSize = 24.sp)
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "${state.profile.longestStreak}",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(R.string.longest_streak),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF94A3B8)
-                )
-            }
-        }
-    }
-    Spacer(modifier = Modifier.height(32.dp))
-
-    // Catch-up Section
-    if (state.missedDaysCount > 0) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFEF4444).copy(alpha = 0.15f))
-        ) {
-            Column(modifier = Modifier.padding(20.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Warning, contentDescription = "Missed", tint = Color(0xFFF87171))
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = stringResource(R.string.days_behind, state.missedDaysCount),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color(0xFFFCA5A5),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = { state.catchUpDayIndex?.let { onNavigateToCard(it) } },
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444))
-                ) {
-                    Text(stringResource(R.string.catch_up_now), color = Color.White, fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-
-    // Action Area (Main Button & Status)
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Status Chip
-        Surface(
-            color = if (state.isTodayCompleted) Color(0xFF10B981).copy(alpha = 0.15f) else Color.White.copy(alpha = 0.05f),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.padding(bottom = 20.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                if (state.isTodayCompleted) {
-                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF34D399), modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.today_completed), color = Color(0xFF34D399), style = MaterialTheme.typography.labelLarge)
-                } else {
-                    Box(modifier = Modifier.size(8.dp).background(Color(0xFFF59E0B), CircleShape))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.today_waiting), color = Color(0xFFFCD34D), style = MaterialTheme.typography.labelLarge)
-                }
-            }
-        }
-
-        // Primary Button
-        val buttonText = if (state.currentDayIndex == 1 && !state.isTodayCompleted) {
-            stringResource(R.string.start_journey)
-        } else if (state.missedDaysCount > 0) {
-            stringResource(R.string.catch_up_unlock)
-        } else if (!state.isTodayCompleted) {
-            stringResource(R.string.start_today_card)
-        } else {
-            stringResource(R.string.review_today_card)
-        }
-
-        Button(
-            onClick = { onNavigateToCard(state.currentDayIndex) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF38BDF8),
-                contentColor = Color.White
-            ),
-            enabled = state.missedDaysCount == 0 || state.isTodayCompleted
+                .size(48.dp)
+                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
+            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = buttonText,
-                style = MaterialTheme.typography.titleMedium,
+                text = (displayName.firstOrNull() ?: 'L').uppercase(),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
+                style = MaterialTheme.typography.titleLarge
             )
         }
     }
 
-    Spacer(modifier = Modifier.height(48.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
-    // Recent Words Showcase
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = "Today's Preview",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.padding(horizontal = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Mock Teaser Words
-        val teaserWords = listOf(
-            Pair("Resilient", "Able to withstand or recover"),
-            Pair("Ephemeral", "Lasting for a very short time"),
-            Pair("Tenacious", "Tending to keep a firm hold")
-        )
-        
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp)
+    // Main Card
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(elevation = 16.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0x1A000000)),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp)
         ) {
-            items(teaserWords) { (word, meaning) ->
-                Card(
-                    modifier = Modifier.width(200.dp).height(120.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B))
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = word,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF38BDF8)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = meaning,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF94A3B8),
-                            maxLines = 2
-                        )
-                    }
+            Text(
+                text = "STAGE 1 - ESSENTIAL VERBS",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.secondary,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.2.sp
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "Day ${state.currentDayIndex}",
+                style = MaterialTheme.typography.displayMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Today's focus includes critical words for your exam foundation.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            val buttonText = if (state.isTodayCompleted) "Review Day ->" else "Start Day ->"
+            
+            Button(
+                onClick = { onNavigateToCard(state.currentDayIndex) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = buttonText,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
     }
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Metrics Grid (2x2)
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        MetricCard(
+            modifier = Modifier.weight(1f),
+            title = "Days done",
+            value = "${state.profile.streakCount}",
+            icon = { Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+        )
+        MetricCard(
+            modifier = Modifier.weight(1f),
+            title = "Words Learned",
+            value = "${state.profile.streakCount * 2}", // Mock formula
+            icon = { Icon(Icons.Default.List, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) }
+        )
+    }
+    
+    Spacer(modifier = Modifier.height(16.dp))
+    
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        MetricCard(
+            modifier = Modifier.weight(1f),
+            title = "Accuracy",
+            value = "94%",
+            icon = { Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+        )
+        MetricCard(
+            modifier = Modifier.weight(1f),
+            title = "Journey %",
+            value = "${((state.profile.streakCount / 99f) * 100).toInt()}%",
+            icon = { Icon(Icons.Default.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) }
+        )
+    }
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Progress Bar
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(
+                text = "Overall Progress",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = "${state.profile.streakCount} / 99 Days",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        LinearProgressIndicator(
+            progress = { state.profile.streakCount / 99f },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .padding(horizontal = 4.dp), // for rounded corners effectively
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.primaryContainer,
+        )
+    }
 }
+
+@Composable
+fun MetricCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    value: String,
+    icon: @Composable () -> Unit
+) {
+    Card(
+        modifier = modifier.shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp), spotColor = Color(0x0D000000)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    icon()
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+

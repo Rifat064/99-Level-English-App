@@ -27,8 +27,9 @@ class SplashViewModel @Inject constructor(
 
     val uiState: StateFlow<SplashUiState> = combine(
         authRepository.sessionStatus,
-        settingsRepository.isOnboardingCompleted
-    ) { sessionStatus, isOnboardingCompleted ->
+        settingsRepository.isOnboardingCompleted,
+        settingsRepository.guestLoginTimestamp
+    ) { sessionStatus, isOnboardingCompleted, guestLoginTimestamp ->
         when (sessionStatus) {
             AuthSessionStatus.Authenticated -> {
                 if (isOnboardingCompleted) {
@@ -37,7 +38,23 @@ class SplashViewModel @Inject constructor(
                     SplashUiState.GoToOnboarding
                 }
             }
-            AuthSessionStatus.NotAuthenticated -> SplashUiState.GoToLogin
+            AuthSessionStatus.NotAuthenticated -> {
+                if (guestLoginTimestamp != null) {
+                    val currentTime = System.currentTimeMillis()
+                    val threeDaysMillis = 3L * 24 * 60 * 60 * 1000
+                    if ((currentTime - guestLoginTimestamp) < threeDaysMillis) {
+                        if (isOnboardingCompleted) {
+                            SplashUiState.GoToHome
+                        } else {
+                            SplashUiState.GoToOnboarding
+                        }
+                    } else {
+                        SplashUiState.GoToLogin
+                    }
+                } else {
+                    SplashUiState.GoToLogin
+                }
+            }
             else -> SplashUiState.Loading // Initializing or RefreshFailure (could retry, but keep loading until resolved)
         }
     }.stateIn(

@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,6 +29,14 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override val ttsAccent: Flow<String> = dataStore.data.map { preferences ->
         preferences[PreferencesKeys.TTS_ACCENT] ?: "en-US"
+    }
+
+    override val guestName: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.GUEST_NAME]
+    }
+
+    override val guestLoginTimestamp: Flow<Long?> = dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.GUEST_LOGIN_TIMESTAMP]
     }
 
     override suspend fun completeOnboarding() {
@@ -54,10 +63,26 @@ class SettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setGuestSession(name: String, timestamp: Long) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.GUEST_NAME] = name
+            preferences[PreferencesKeys.GUEST_LOGIN_TIMESTAMP] = timestamp
+        }
+    }
+
+    override suspend fun clearGuestSession() {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferencesKeys.GUEST_NAME)
+            preferences.remove(PreferencesKeys.GUEST_LOGIN_TIMESTAMP)
+        }
+    }
+
     private object PreferencesKeys {
         val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
         val NOTIFICATION_HOUR = intPreferencesKey("notification_hour")
         val THEME = stringPreferencesKey("theme")
         val TTS_ACCENT = stringPreferencesKey("tts_accent")
+        val GUEST_NAME = stringPreferencesKey("guest_name")
+        val GUEST_LOGIN_TIMESTAMP = longPreferencesKey("guest_login_timestamp")
     }
 }

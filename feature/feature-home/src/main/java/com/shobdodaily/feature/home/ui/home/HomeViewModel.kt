@@ -15,10 +15,14 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import com.shobdodaily.core.model.repository.NotificationScheduler
 
+import com.shobdodaily.core.datastore.SettingsRepository
+import kotlinx.coroutines.flow.first
+
 sealed interface HomeUiState {
     object Loading : HomeUiState
     data class Success(
         val profile: Profile,
+        val guestName: String?,
         val currentDayIndex: Int,
         val isTodayCompleted: Boolean,
         val missedDaysCount: Int = 0,
@@ -31,7 +35,8 @@ sealed interface HomeUiState {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val notificationScheduler: NotificationScheduler
+    private val notificationScheduler: NotificationScheduler,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -89,8 +94,11 @@ class HomeViewModel @Inject constructor(
                 // Schedule or update daily notification based on profile setting
                 notificationScheduler.scheduleDailyNotification(profile.notifyHour)
 
+                val guestName = settingsRepository.guestName.first()
+
                 _uiState.value = HomeUiState.Success(
                     profile = profile,
+                    guestName = guestName,
                     currentDayIndex = currentDayIndex,
                     isTodayCompleted = isTodayCompleted,
                     missedDaysCount = catchUpDaysAvailable,

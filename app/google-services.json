@@ -12,7 +12,20 @@
           "package_name": "com.shobdodaily.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "607310167838-j4mkd9p4ob17tqsi03rdthgelj4lfshp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shobdodaily.app",
+            "certificate_hash": "00efcece3f4d69d6c3c64cfdf473804db0e3a52a"
+          }
+        },
+        {
+          "client_id": "607310167838-uvf5qdftnh9jb41g8vv688bf1rh8l0ou.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDw_qJpClhcnobSWkxUgn0KY3TiLCdW8Hc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607310167838-uvf5qdftnh9jb41g8vv688bf1rh8l0ou.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -8,8 +8,13 @@ interface SettingsRepository {
     val theme: Flow<String>
     val ttsAccent: Flow<String>
     
+    val guestName: Flow<String?>
+    val guestLoginTimestamp: Flow<Long?>
+    
     suspend fun completeOnboarding()
     suspend fun setNotificationHour(hour: Int)
     suspend fun setTheme(theme: String)
     suspend fun setTtsAccent(accent: String)
+    suspend fun setGuestSession(name: String, timestamp: Long)
+    suspend fun clearGuestSession()
 }

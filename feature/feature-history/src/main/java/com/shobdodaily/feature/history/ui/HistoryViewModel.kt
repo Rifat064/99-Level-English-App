@@ -9,22 +9,31 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import com.shobdodaily.core.model.Word
+import com.shobdodaily.core.model.repository.WordRepository
+
 
 sealed interface HistoryUiState {
     object Loading : HistoryUiState
-    data class Success(val weeks: Map<Int, List<HistoryCardItem>>) : HistoryUiState
+    data class Success(
+        val weeks: Map<Int, List<HistoryCardItem>>,
+        val learnedWords: List<Word> = emptyList()
+    ) : HistoryUiState
     data class Error(val message: String) : HistoryUiState
 }
+
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val cardRepository: CardRepository,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val wordRepository: WordRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Loading)
@@ -55,7 +64,12 @@ class HistoryViewModel @Inject constructor(
                     .collect { cards ->
                         // Group by week. Week 1 is days 1..7, Week 2 is 8..14, etc.
                         val weeks = cards.groupBy { (it.dayIndex - 1) / 7 + 1 }
-                        _uiState.value = HistoryUiState.Success(weeks)
+                        // Fetch all learned words for search
+                        val learnedWords = wordRepository.searchWords("", null).first()
+                        _uiState.value = HistoryUiState.Success(
+                            weeks = weeks,
+                            learnedWords = learnedWords
+                        )
                     }
             }.onFailure { exception ->
                 _uiState.value = HistoryUiState.Error(exception.message ?: "Failed to load history")

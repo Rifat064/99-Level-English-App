@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.shobdodaily.core.datastore.SettingsRepository
 
 sealed interface AuthUiState {
     object Idle : AuthUiState
@@ -30,15 +31,23 @@ sealed interface AuthUiState {
     data class Error(val message: String) : AuthUiState
 }
 
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val profileRepository: ProfileRepository,
+    private val settingsRepository: SettingsRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
+
+    fun setGuestSession(name: String) {
+        viewModelScope.launch {
+            settingsRepository.setGuestSession(name, System.currentTimeMillis())
+        }
+    }
 
     fun checkAuthStatus() {
         viewModelScope.launch {
