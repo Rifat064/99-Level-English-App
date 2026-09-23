@@ -15,3 +15,6 @@
 # Core Models (DTOs)
 -keep class com.shobdodaily.core.network.model.** { *; }
 -keep class com.shobdodaily.core.model.** { *; }
+
+# Ignore Ktor debug missing classes on Android
+-dontwarn java.lang.management.**

@@ -11,7 +11,7 @@ session starts with stale information here, the agent will repeat or skip work.
 | Field | Value |
 |---|---|
 | Current phase | Phase 7 — Release |
-| Current step | 7.3 (next: Play compliance) |
+| Current step | 7.4 (next: Accessibility) |
 | Last updated | 2026-09-23 |
 | Build status | passes assembleDebug, detekt, ktlint, & unit tests |
 | Blocked on | nothing |
@@ -93,7 +93,7 @@ Never delete history from the session log or decision log. Append only.
 ### Phase 7 — Release
 - [x] 7.1 Crash reporting + analytics
 - [x] 7.2 R8 rules
-- [ ] 7.3 Play compliance
+- [x] 7.3 Play compliance
 - [ ] 7.4 Accessibility
 - [ ] 7.5 Localization
 - [ ] 7.6 Season 2 content
@@ -198,3 +198,4 @@ Append one row per completed step.
 | 2026-09-23 | 6.5 | Implemented Catch-up flow in HomeViewModel and HomeScreen. Calculates missed days, respecting the 7-day free window. Older days are correctly locked out for free users. | assembleDebug passed. |
 | 2026-09-23 | 7.1 | Integrated Sentry crash reporting + Sentry Compose analytics. Added SENTRY_DSN to local.properties. Added test crash button in SettingsScreen. | assembleDebug passed. |
 | 2026-09-23 | 7.2 | Added ProGuard rules for kotlinx.serialization, Ktor, and Supabase models. Set isMinifyEnabled = true for release builds. | assembleRelease passed without serialization errors. |
+| 2026-09-23 | 7.3 | Created privacy policy, account deletion page, and Data Safety form guide in `docs/` for Play Console compliance. | Deferred pre-launch report verification to owner. |
