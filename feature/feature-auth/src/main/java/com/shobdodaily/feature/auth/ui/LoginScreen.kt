@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -128,9 +129,29 @@ fun LoginScreen(
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             } else {
+                var termsAccepted by remember { mutableStateOf(false) }
+
+                // T&C Checkbox
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+                ) {
+                    Checkbox(
+                        checked = termsAccepted,
+                        onCheckedChange = { termsAccepted = it }
+                    )
+                    Text(
+                        text = "I agree to the Terms & Conditions and acknowledge this app will securely access my Google Name and Profile Photo.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        lineHeight = 16.sp
+                    )
+                }
+
                 // Action: Main Pill Button
                 Button(
                     onClick = { viewModel.signInWithGoogle(context) },
+                    enabled = termsAccepted,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp),

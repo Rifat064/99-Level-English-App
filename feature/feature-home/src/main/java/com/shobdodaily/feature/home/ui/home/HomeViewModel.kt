@@ -17,17 +17,20 @@ import com.shobdodaily.core.model.repository.NotificationScheduler
 
 import com.shobdodaily.core.datastore.SettingsRepository
 import kotlinx.coroutines.flow.first
+import com.shobdodaily.core.model.repository.QuizRepository
 
 sealed interface HomeUiState {
     object Loading : HomeUiState
     data class Success(
         val profile: Profile,
         val guestName: String?,
+        val accuracy: String,
         val currentDayIndex: Int,
         val isTodayCompleted: Boolean,
         val missedDaysCount: Int = 0,
         val catchUpDayIndex: Int? = null,
-        val missedDaysLost: Int = 0 // Days lost because they fell outside the free window
+        val missedDaysLost: Int = 0, // Days lost because they fell outside the free window
+        val announcements: List<com.shobdodaily.core.model.Announcement> = emptyList()
     ) : HomeUiState
     data class Error(val message: String) : HomeUiState
 }
@@ -35,6 +38,8 @@ sealed interface HomeUiState {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
+    private val quizRepository: QuizRepository,
+    private val announcementRepository: com.shobdodaily.core.model.repository.AnnouncementRepository,
     private val notificationScheduler: NotificationScheduler,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
@@ -96,14 +101,38 @@ class HomeViewModel @Inject constructor(
 
                 val guestName = settingsRepository.guestName.first()
 
+                // Calculate Accuracy
+                val attempts: List<com.shobdodaily.core.model.QuizAttempt> = try {
+                    quizRepository.getAllAttempts(profile.id)
+                } catch (e: Exception) {
+                    emptyList()
+                }
+
+                val totalScore = attempts.sumOf { (it.score ?: 0).toInt() }
+                val totalQuestions = attempts.sumOf { (it.total ?: 0).toInt() }
+                
+                val accuracy = if (totalQuestions > 0) {
+                    "${((totalScore.toFloat() / totalQuestions.toFloat()) * 100).toInt()}%"
+                } else {
+                    "N/A"
+                }
+
+                val announcements = try {
+                    announcementRepository.getActiveAnnouncements()
+                } catch (e: Exception) {
+                    emptyList()
+                }
+
                 _uiState.value = HomeUiState.Success(
                     profile = profile,
                     guestName = guestName,
+                    accuracy = accuracy,
                     currentDayIndex = currentDayIndex,
                     isTodayCompleted = isTodayCompleted,
                     missedDaysCount = catchUpDaysAvailable,
                     catchUpDayIndex = catchUpDayIndex,
-                    missedDaysLost = missedDaysLost
+                    missedDaysLost = missedDaysLost,
+                    announcements = announcements
                 )
             }.onFailure { exception ->
                 _uiState.value = HomeUiState.Error(exception.message ?: "Failed to load profile")

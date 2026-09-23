@@ -80,4 +80,18 @@ class OfflineFirstQuizRepository @Inject constructor(
             )
         }
     }
+
+    override suspend fun getAllAttempts(userId: String): List<com.shobdodaily.core.model.QuizAttempt> {
+        return quizAttemptDao.getAllAttempts(userId).map { entity ->
+            com.shobdodaily.core.model.QuizAttempt(
+                id = entity.id,
+                userId = entity.userId,
+                weekIndex = entity.weekIndex,
+                score = entity.score,
+                total = entity.total,
+                answers = entity.answers,
+                takenAt = entity.takenAt?.let { java.time.Instant.parse(it) }
+            )
+        }
+    }
 }

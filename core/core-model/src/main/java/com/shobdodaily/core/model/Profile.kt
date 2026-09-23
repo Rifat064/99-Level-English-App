@@ -5,6 +5,7 @@ import java.time.Instant
 data class Profile(
     val id: String,
     val displayName: String?,
+    val photoUrl: String?,
     val enrolledAt: Instant,
     val wordsPerDay: Int,
     val timezone: String,

@@ -35,4 +35,9 @@ abstract class RepositoryModule {
     abstract fun bindWordRepository(
         offlineFirstWordRepository: com.shobdodaily.core.network.repository.OfflineFirstWordRepository
     ): com.shobdodaily.core.model.repository.WordRepository
+
+    @Binds
+    abstract fun bindAnnouncementRepository(
+        supabaseAnnouncementRepository: com.shobdodaily.core.network.repository.SupabaseAnnouncementRepository
+    ): com.shobdodaily.core.model.repository.AnnouncementRepository
 }

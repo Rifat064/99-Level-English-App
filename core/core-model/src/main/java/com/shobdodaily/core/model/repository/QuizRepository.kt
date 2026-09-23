@@ -8,4 +8,5 @@ interface QuizRepository {
     suspend fun getFullWordPool(): List<Word>
     suspend fun saveQuizAttempt(attempt: com.shobdodaily.core.model.QuizAttempt)
     fun observeQuizAttempt(userId: String, weekIndex: Int): kotlinx.coroutines.flow.Flow<com.shobdodaily.core.model.QuizAttempt?>
+    suspend fun getAllAttempts(userId: String): List<com.shobdodaily.core.model.QuizAttempt>
 }

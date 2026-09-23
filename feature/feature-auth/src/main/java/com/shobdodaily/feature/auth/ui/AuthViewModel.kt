@@ -94,7 +94,8 @@ class AuthViewModel @Inject constructor(
                     if (authResult.isSuccess) {
                         val userId = authRepository.currentUserId
                         if (userId != null) {
-                            profileRepository.createProfileIfNotExist(userId, googleIdTokenCredential.displayName)
+                            val photoUrl = googleIdTokenCredential.profilePictureUri?.toString()
+                            profileRepository.createProfileIfNotExist(userId, googleIdTokenCredential.displayName, photoUrl)
                         }
                         _uiState.value = AuthUiState.Success
                     } else {
@@ -120,7 +121,7 @@ class AuthViewModel @Inject constructor(
             if (result.isSuccess) {
                 val userId = authRepository.currentUserId
                 if (userId != null) {
-                    profileRepository.createProfileIfNotExist(userId, null)
+                    profileRepository.createProfileIfNotExist(userId, null, null)
                 }
                 _uiState.value = AuthUiState.Success
             } else {

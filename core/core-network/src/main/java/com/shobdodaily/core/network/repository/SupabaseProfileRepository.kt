@@ -17,9 +17,9 @@ class SupabaseProfileRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) : ProfileRepository {
 
-    override suspend fun createProfileIfNotExist(userId: String, displayName: String?): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun createProfileIfNotExist(userId: String, displayName: String?, photoUrl: String?): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val dto = ProfileInsertDto(id = userId, displayName = displayName)
+            val dto = ProfileInsertDto(id = userId, displayName = displayName, photoUrl = photoUrl)
             // Use upsert to handle cases where the profile might already exist, ignoring duplicates
             supabaseClient.postgrest["profiles"].upsert(dto) {
                 onConflict = "id"
@@ -40,6 +40,7 @@ class SupabaseProfileRepository @Inject constructor(
                     com.shobdodaily.core.model.Profile(
                         id = "guest",
                         displayName = "Guest Learner",
+                        photoUrl = null,
                         enrolledAt = java.time.Instant.now(),
                         wordsPerDay = 2,
                         timezone = "Asia/Dhaka",

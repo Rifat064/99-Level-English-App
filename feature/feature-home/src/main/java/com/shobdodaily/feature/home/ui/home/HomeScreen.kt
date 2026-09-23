@@ -139,7 +139,15 @@ private fun HomeContent(
         }
     }
 
-    Spacer(modifier = Modifier.height(32.dp))
+    if (state.announcements.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(24.dp))
+        state.announcements.forEach { announcement ->
+            AnnouncementBanner(announcement = announcement)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    } else {
+        Spacer(modifier = Modifier.height(32.dp))
+    }
 
     // Main Card
     Card(
@@ -222,13 +230,13 @@ private fun HomeContent(
         MetricCard(
             modifier = Modifier.weight(1f),
             title = "Accuracy",
-            value = "94%",
+            value = state.accuracy,
             icon = { Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
         )
         MetricCard(
             modifier = Modifier.weight(1f),
             title = "Journey %",
-            value = "${((state.profile.streakCount / 99f) * 100).toInt()}%",
+            value = "${((state.profile.streakCount / 99f).coerceIn(0f, 1f) * 100).toInt()}%",
             icon = { Icon(Icons.Default.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) }
         )
     }
@@ -260,6 +268,9 @@ private fun HomeContent(
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.primaryContainer,
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+        MilestonesSection()
     }
 }
 
@@ -307,4 +318,106 @@ fun MetricCard(
     }
 }
 
+@Composable
+fun MilestonesSection() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Exam Milestones",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            MilestoneBadge("BCS & Govt", Icons.Default.Star, false)
+            MilestoneBadge("IELTS", Icons.Default.Star, false)
+            MilestoneBadge("Bank", Icons.Default.Star, false)
+            MilestoneBadge("MBA", Icons.Default.Star, false)
+        }
+    }
+}
 
+@Composable
+fun MilestoneBadge(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, isUnlocked: Boolean) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(
+                    if (isUnlocked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                    CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = if (isUnlocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                modifier = Modifier.size(32.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelSmall,
+            color = if (isUnlocked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+fun AnnouncementBanner(announcement: com.shobdodaily.core.model.Announcement) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp), spotColor = Color(0x1A000000)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (announcement.type == "EDITORS_CHOICE") 
+                MaterialTheme.colorScheme.tertiaryContainer 
+            else 
+                MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            if (announcement.type == "EDITORS_CHOICE") {
+                Text(
+                    text = "🌟 Rifat's Pick",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    fontWeight = FontWeight.Bold
+                )
+            } else {
+                Text(
+                    text = "🔔 Upcoming Event",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = announcement.title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = if (announcement.type == "EDITORS_CHOICE") 
+                    MaterialTheme.colorScheme.onTertiaryContainer 
+                else 
+                    MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = announcement.message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (announcement.type == "EDITORS_CHOICE") 
+                    MaterialTheme.colorScheme.onTertiaryContainer 
+                else 
+                    MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            // Note: In a real implementation, actionUrl and targetWordId would trigger navigation
+        }
+    }
+}

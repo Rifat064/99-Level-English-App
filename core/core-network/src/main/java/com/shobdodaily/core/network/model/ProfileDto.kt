@@ -9,6 +9,7 @@ import java.time.Instant
 data class ProfileDto(
     @SerialName("id") val id: String,
     @SerialName("display_name") val displayName: String? = null,
+    @SerialName("photo_url") val photoUrl: String? = null,
     @SerialName("enrolled_at") val enrolledAt: String,
     @SerialName("words_per_day") val wordsPerDay: Int,
     @SerialName("timezone") val timezone: String,
@@ -21,6 +22,7 @@ data class ProfileDto(
 fun ProfileDto.toDomain() = Profile(
     id = id,
     displayName = displayName,
+    photoUrl = photoUrl,
     enrolledAt = Instant.parse(enrolledAt),
     wordsPerDay = wordsPerDay,
     timezone = timezone,
