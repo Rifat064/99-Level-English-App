@@ -204,17 +204,7 @@ fun SettingsScreen(
                 Text("Test Crash (Dev Only)")
             }
 
-            Spacer(modifier = Modifier.height(48.dp))
-            androidx.compose.material3.TextButton(
-                onClick = { viewModel.onEasterEggClick() },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Colonel SS Hans Lamda",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
+
         }
     }
     }
